@@ -43,16 +43,6 @@ export default function ShowCertificate({
         },
     ];
 
-    function handleRevoke() {
-        if (
-            confirm(
-                'Are you sure you want to revoke this certificate? This action cannot be undone.',
-            )
-        ) {
-            router.patch(`/issuer/certificates/${certificate.id}/revoke`);
-        }
-    }
-
     const details = [
         {
             icon: User,
