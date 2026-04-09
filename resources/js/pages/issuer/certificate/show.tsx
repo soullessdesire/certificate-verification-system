@@ -1,11 +1,10 @@
-import { Link, router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import {
     FileBadge2,
     User,
     GraduationCap,
     CalendarDays,
     Hash,
-    ShieldX,
     ExternalLink,
     ArrowLeft,
 } from 'lucide-react';
