@@ -12,14 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('certificates', function (Blueprint $table) {
-            $table->uuid('uuid')->primary();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('course');
             $table->timestamp('issued_at');
+            $table->unsignedBigInteger('issued_by');
             $table->string('hash')->unique();
-            $table->enum('status', ['valid', 'invalid', 'revoked']);
+            $table->enum('status', ['valid', 'revoked']);
+            $table->softDeletes();
             $table->timestamps();
 
+            $table->foreign('issued_by')->references('id')->on('users')->cascadeOnDelete();
             $table->index(['hash']);
         });
     }

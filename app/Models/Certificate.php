@@ -2,21 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class Certificate extends Model
 {
     /** @use HasFactory<\Database\Factories\CertificateFactory> */
-    use HasFactory;
+    use HasFactory, HasUuids, SoftDeletes;
 
 
     protected $fillable = [
         'name',
         'course',
         'issued_at',
-        'hash'
+        'issued_by',
+        'hash',
+        'status'
     ];
 
     protected $casts = [
@@ -27,21 +31,14 @@ class Certificate extends Model
 
     public $incrementing = false;
 
-    /**
-     * Boot function to automatically generate UUID for id
-     * and optionally generate signed hash if not provided.
-     */
     protected static function booted()
     {
         static::creating(function ($certificate) {
-            // Generate UUID for primary key if not set
             if (empty($certificate->id)) {
                 $certificate->id = (string) Str::uuid();
             }
 
-            // Generate a signed hash if not set
             if (empty($certificate->hash)) {
-                // Using HMAC with app key for signature
                 $certificate->hash = hash_hmac(
                     'sha256',
                     $certificate->id,

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class AuditLog extends Model
 {
@@ -21,4 +22,13 @@ class AuditLog extends Model
     protected $casts = [
         'created_at' => 'datetime'
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($audit_log) {
+            if (empty($audit_log->id)) {
+                $audit_log->id = (string) Str::uuid();
+            }
+        });
+    }
 }

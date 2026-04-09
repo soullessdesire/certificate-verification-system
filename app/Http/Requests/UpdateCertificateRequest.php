@@ -12,7 +12,7 @@ class UpdateCertificateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()->hasRole('issuer');
     }
 
     /**
@@ -23,7 +23,7 @@ class UpdateCertificateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'status' => 'in:invalid,valid,revoked'
         ];
     }
 }

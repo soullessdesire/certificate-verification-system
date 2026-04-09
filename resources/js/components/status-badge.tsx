@@ -2,40 +2,39 @@
 
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import type { CertificateStatus, VerificationStatus } from '@/types/dashboard';
 
-type Status = 'active' | 'revoked' | 'pending' | 'valid' | 'invalid';
+// Certificate statuses — only valid or revoked.
+// "invalid" is NOT a certificate status; it belongs to verification logs only.
+type BadgeStatus = CertificateStatus | VerificationStatus;
 
-const statusConfig: Record<Status, { label: string; className: string }> = {
-    active: {
-        label: 'Active',
-        className: 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300',
+const statusConfig: Record<BadgeStatus, { label: string; className: string }> = {
+    valid: {
+        label: 'Valid',
+        className:
+            'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300',
     },
     revoked: {
         label: 'Revoked',
-        className: 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300',
+        className:
+            'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300',
     },
-    pending: {
-        label: 'Pending',
-        className: 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-300',
-    },
-    valid: {
-        label: 'Valid',
-        className: 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300',
-    },
+    // "invalid" is used only in VerificationLog — means no certificate was found
     invalid: {
-        label: 'Invalid',
-        className: 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300',
+        label: 'Not Found',
+        className:
+            'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-300',
     },
 };
 
 interface StatusBadgeProps {
-    status: Status;
+    status: BadgeStatus;
     className?: string;
 }
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
     const config = statusConfig[status];
-    
+
     return (
         <Badge
             variant="outline"

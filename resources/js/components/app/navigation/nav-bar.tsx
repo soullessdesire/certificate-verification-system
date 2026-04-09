@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 import type { PageProps } from "@inertiajs/core";
 import { usePage, Link } from "@inertiajs/react";
 import { Menu, X, ShieldCheck, LayoutDashboard, LogOut, User } from "lucide-react";
@@ -20,11 +21,12 @@ import {
 import { useInitials } from "@/hooks/use-initials";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-import { about, contact,home, issuer, logout, verify } from "@/routes";
+import { about, contact,home, issuer, logout} from "@/routes";
 import { register } from "@/routes";
 import { admin } from "@/routes";
 import login from "@/routes/login";
 import { edit } from "@/routes/profile";
+import { index as verify } from '@/routes/verify';
 
 
 const INSTITUTION = "Meru University of Science and Technology";

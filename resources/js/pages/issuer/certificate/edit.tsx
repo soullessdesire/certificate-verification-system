@@ -1,4 +1,4 @@
-import { useForm, Link } from '@inertiajs/react';
+import { Link, Form } from '@inertiajs/react';
 import {
     FileBadge2,
     ArrowLeft,
@@ -9,9 +9,8 @@ import {
     CalendarDays,
     ShieldCheck,
     ShieldX,
-    Clock,
 } from 'lucide-react';
-import type { FormEvent } from 'react';
+import { useState } from 'react';
 
 import { PageHeader } from '@/components/dashboard/page-header';
 import { StatusBadge } from '@/components/status-badge';
@@ -33,17 +32,19 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
-import type { Certificate } from '@/types';
+import { issuer } from '@/routes';
+import { edit, index, show, update } from '@/routes/certificates';
+import type { Certificate, CertificateStatus } from '@/types/dashboard';
 
-// ── Types ────────────────────────────────────────────────────────────────────
-
-type CertificateStatus = 'active' | 'revoked' | 'pending';
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 interface EditStatusProps {
     certificate: Certificate;
 }
 
-// ── Status option config ──────────────────────────────────────────────────────
+// ── Status options — only valid or revoked ────────────────────────────────────
+// "invalid" is NOT a selectable status. It only appears in verification logs
+// when a hash lookup finds no matching certificate in the system.
 
 const statusOptions: {
     value: CertificateStatus;
@@ -53,25 +54,20 @@ const statusOptions: {
     className: string;
 }[] = [
     {
-        value: 'active',
-        label: 'Active',
-        description: 'Certificate is valid and can be verified.',
+        value: 'valid',
+        label: 'Valid',
+        description: 'Certificate is valid and will pass verification.',
         icon: ShieldCheck,
-        className: 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300',
-    },
-    {
-        value: 'pending',
-        label: 'Pending',
-        description: 'Certificate has been created but is not yet active.',
-        icon: Clock,
-        className: 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-300',
+        className:
+            'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300',
     },
     {
         value: 'revoked',
         label: 'Revoked',
         description: 'Certificate has been revoked and will fail verification.',
         icon: ShieldX,
-        className: 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300',
+        className:
+            'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300',
     },
 ];
 
@@ -101,28 +97,20 @@ function DetailRow({
     );
 }
 
-// ── Page ─────────────────────────────────────────────────────────────────────
+// ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function EditCertificateStatus({ certificate }: EditStatusProps) {
+    const [status, setStatus] = useState<CertificateStatus>(certificate.status);
+
+    const selectedOption = statusOptions.find((o) => o.value === status);
+    const statusChanged  = status !== certificate.status;
+
     const breadcrumbs = [
-        { title: 'Dashboard',    href: '/issuer/dashboard'                              },
-        { title: 'Certificates', href: '/issuer/certificates'                           },
-        { title: certificate.graduate_name, href: `/issuer/certificates/${certificate.id}` },
-        { title: 'Edit Status',  href: `/issuer/certificates/${certificate.id}/edit-status` },
+        { title: 'Dashboard',          href: issuer().url                                  },
+        { title: 'Certificates',       href: index().url                                   },
+        { title: certificate.name,     href: show({ certificate: certificate.id }).url     },
+        { title: 'Edit Status',        href: edit({ certificate: certificate.id }).url     },
     ];
-
-    const { data, setData, patch, processing, errors} = useForm({
-        status: certificate.status as CertificateStatus,
-    });
-
-    const selectedOption = statusOptions.find((o) => o.value === data.status);
-
-    function handleSubmit(e: FormEvent) {
-        e.preventDefault();
-        patch(`/issuer/certificates/${certificate.id}/status`);
-    }
-
-    const statusChanged = data.status !== certificate.status;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -133,7 +121,7 @@ export default function EditCertificateStatus({ certificate }: EditStatusProps) 
                     description="Update the status of this certificate. All other details are read-only."
                     icon={FileBadge2}
                     actions={
-                        <Link href={`/issuer/certificates/${certificate.id}`}>
+                        <Link href={show({ certificate: certificate.id }).url}>
                             <Button variant="outline" size="sm" className="gap-2">
                                 <ArrowLeft className="h-4 w-4" />
                                 Back to Certificate
@@ -145,115 +133,131 @@ export default function EditCertificateStatus({ certificate }: EditStatusProps) 
                 <div className="grid max-w-3xl gap-6 lg:grid-cols-[1fr_280px]">
 
                     {/* ── Status form ── */}
-                    <form onSubmit={handleSubmit}>
-                        <Card>
-                            <CardHeader className="pb-4">
-                                <CardTitle className="text-base">Certificate Status</CardTitle>
-                                <CardDescription>
-                                    Select the new status for this certificate. This change
-                                    takes effect immediately.
-                                </CardDescription>
-                            </CardHeader>
+                    <Form
+                        method="patch"
+                        action={update({ certificate: certificate.id }).url}
+                    >
+                        {({ processing, errors }: {
+                            processing: boolean;
+                            errors: Partial<Record<'status', string>>;
+                        }) => (
+                            <>
+                                {/*
+                                  * shadcn Select doesn't render a real <select> element,
+                                  * so Form can't read its value from the DOM.
+                                  * A hidden input stays in sync with local state instead.
+                                  */}
+                                <input type="hidden" name="status" value={status} />
 
-                            <CardContent className="space-y-5">
+                                <Card>
+                                    <CardHeader className="pb-4">
+                                        <CardTitle className="text-base">Certificate Status</CardTitle>
+                                        <CardDescription>
+                                            Select the new status. This change takes effect immediately.
+                                        </CardDescription>
+                                    </CardHeader>
 
-                                {/* Current status */}
-                                <div className="flex items-center justify-between rounded-lg border bg-muted/40 px-4 py-3">
-                                    <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                                        Current Status
-                                    </span>
-                                    <StatusBadge status={certificate.status} />
-                                </div>
+                                    <CardContent className="space-y-5">
 
-                                <Separator />
+                                        {/* Current status */}
+                                        <div className="flex items-center justify-between rounded-lg border bg-muted/40 px-4 py-3">
+                                            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                                                Current Status
+                                            </span>
+                                            <StatusBadge status={certificate.status} />
+                                        </div>
 
-                                {/* Status selector */}
-                                <div className="space-y-1.5">
-                                    <Label htmlFor="status">New Status</Label>
-                                    <Select
-                                        value={data.status}
-                                        onValueChange={(val) =>
-                                            setData('status', val as CertificateStatus)
-                                        }
-                                        disabled={processing}
-                                    >
-                                        <SelectTrigger id="status" className="w-full">
-                                            <SelectValue placeholder="Select status…" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {statusOptions.map(({ value, label, icon: Icon }) => (
-                                                <SelectItem key={value} value={value}>
-                                                    <div className="flex items-center gap-2">
-                                                        <Icon className="h-3.5 w-3.5" />
-                                                        {label}
-                                                    </div>
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    {errors.status && (
-                                        <p className="text-xs text-destructive">{errors.status}</p>
-                                    )}
-                                </div>
+                                        <Separator />
 
-                                {/* Selected status description */}
-                                {selectedOption && (
-                                    <div
-                                        className={`flex items-start gap-3 rounded-lg border px-4 py-3 text-sm ${selectedOption.className}`}
-                                    >
-                                        <selectedOption.icon className="mt-0.5 h-4 w-4 shrink-0" />
-                                        <p>{selectedOption.description}</p>
-                                    </div>
-                                )}
+                                        {/* Status selector */}
+                                        <div className="space-y-1.5">
+                                            <Label htmlFor="status">New Status</Label>
+                                            <Select
+                                                value={status}
+                                                onValueChange={(val) =>
+                                                    setStatus(val as CertificateStatus)
+                                                }
+                                                disabled={processing}
+                                            >
+                                                <SelectTrigger id="status" className="w-full">
+                                                    <SelectValue placeholder="Select status…" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {statusOptions.map(({ value, label, icon: Icon }) => (
+                                                        <SelectItem key={value} value={value}>
+                                                            <div className="flex items-center gap-2">
+                                                                <Icon className="h-3.5 w-3.5" />
+                                                                {label}
+                                                            </div>
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            {errors.status && (
+                                                <p className="text-xs text-destructive">{errors.status}</p>
+                                            )}
+                                        </div>
 
-                                {/* Revoke warning */}
-                                {data.status === 'revoked' && certificate.status !== 'revoked' && (
-                                    <div className="rounded-lg border border-destructive/40 bg-destructive/5 px-4 py-3">
-                                        <p className="text-xs font-semibold text-destructive">
-                                            Warning — this action affects verification
-                                        </p>
-                                        <p className="mt-1 text-xs text-destructive/80">
-                                            Revoking this certificate will cause all future
-                                            verification attempts to fail. Anyone scanning the
-                                            QR code will see an invalid result.
-                                        </p>
-                                    </div>
-                                )}
-
-                                <Separator />
-
-                                <div className="flex items-center gap-3">
-                                    <Button
-                                        type="submit"
-                                        disabled={processing || !statusChanged}
-                                        className="gap-2"
-                                    >
-                                        {processing ? (
-                                            <>
-                                                <Loader2 className="h-4 w-4 animate-spin" />
-                                                Saving…
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Save className="h-4 w-4" />
-                                                Save Status
-                                            </>
+                                        {/* Selected status description */}
+                                        {selectedOption && (
+                                            <div
+                                                className={`flex items-start gap-3 rounded-lg border px-4 py-3 text-sm ${selectedOption.className}`}
+                                            >
+                                                <selectedOption.icon className="mt-0.5 h-4 w-4 shrink-0" />
+                                                <p>{selectedOption.description}</p>
+                                            </div>
                                         )}
-                                    </Button>
 
-                                    <Link href={`/issuer/certificates/${certificate.id}`}>
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            disabled={processing}
-                                        >
-                                            Cancel
-                                        </Button>
-                                    </Link>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </form>
+                                        {/* Revoke warning */}
+                                        {status === 'revoked' && certificate.status !== 'revoked' && (
+                                            <div className="rounded-lg border border-destructive/40 bg-destructive/5 px-4 py-3">
+                                                <p className="text-xs font-semibold text-destructive">
+                                                    Warning — this action affects verification
+                                                </p>
+                                                <p className="mt-1 text-xs text-destructive/80">
+                                                    Revoking this certificate will cause all future
+                                                    verification attempts to fail. Anyone scanning the
+                                                    QR code will see a failed result.
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        <Separator />
+
+                                        <div className="flex items-center gap-3">
+                                            <Button
+                                                type="submit"
+                                                disabled={processing || !statusChanged}
+                                                className="gap-2"
+                                            >
+                                                {processing ? (
+                                                    <>
+                                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                                        Saving…
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Save className="h-4 w-4" />
+                                                        Save Status
+                                                    </>
+                                                )}
+                                            </Button>
+
+                                            <Link href={show({ certificate: certificate.id }).url}>
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    disabled={processing}
+                                                >
+                                                    Cancel
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </>
+                        )}
+                    </Form>
 
                     {/* ── Read-only certificate info ── */}
                     <Card className="h-fit">
@@ -266,7 +270,7 @@ export default function EditCertificateStatus({ certificate }: EditStatusProps) 
                             <DetailRow
                                 icon={User}
                                 label="Graduate"
-                                value={certificate.graduate_name}
+                                value={certificate.name}
                             />
                             <DetailRow
                                 icon={GraduationCap}

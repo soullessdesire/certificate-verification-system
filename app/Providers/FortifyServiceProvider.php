@@ -13,7 +13,9 @@ use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
+use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use App\Http\Responses\LoginResponse;
+use App\Http\Responses\SignupResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -36,7 +38,11 @@ class FortifyServiceProvider extends ServiceProvider
 
         $this->app->singleton(
             LoginResponseContract::class,
-            LoginResponse::class
+            LoginResponse::class,
+        );
+        $this->app->singleton(
+            RegisterResponseContract::class,
+            SignupResponse::class
         );
     }
 

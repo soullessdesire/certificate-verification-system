@@ -1,7 +1,6 @@
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import {
     ShieldCheck,
-    ShieldX,
     Search,
     Loader2,
     GraduationCap,
@@ -10,9 +9,11 @@ import {
     Hash,
     ArrowRight,
     Info,
+    AlertCircle,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,26 +27,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import MainAppLayout from "@/layouts/main-app-layout";
+import { show } from "@/routes/verify";
 
-// ── Types ────────────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
 
-interface Certificate {
+interface CertificateFlash {
     name: string;
     course: string;
     issued_at: string;
+    status: string;
 }
 
-interface VerificationResult {
-    valid: boolean;
-    certificate?: Certificate;
-    message?: string;
+interface Flash {
+    type: "success" | "error";
+    message: string;
+    certificate?: CertificateFlash;
 }
 
-interface VerifyPageProps {
-    /** Populated by Laravel when the route is /verify/{hash} */
-    result?: VerificationResult;
-    /** The hash that was looked up — used to pre-fill the input */
-    queried_hash?: string;
+interface SharedProps {
+    flash?: Flash;
+    [key: string]: unknown;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -58,87 +59,132 @@ function formatDate(iso: string): string {
     });
 }
 
-// ── Result Card ───────────────────────────────────────────────────────────────
+// ── Success card ──────────────────────────────────────────────────────────────
 
-function ResultCard({ result }: { result: VerificationResult }) {
-    if (!result.valid) {
-        return (
-            <Card className="border-destructive/40 bg-destructive/5">
-                <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
-                        <ShieldX className="h-8 w-8 text-destructive" />
-                    </div>
-                    <div className="space-y-1">
-                        <p className="text-base font-semibold text-destructive">
-                            Verification Failed
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                            {result.message ??
-                                "This certificate could not be verified. It may be invalid, revoked, or not found in our records."}
-                        </p>
-                    </div>
-                </CardContent>
-            </Card>
-        );
-    }
-
-    const cert = result.certificate!;
+function SuccessCard({ certificate }: { certificate: CertificateFlash }) {
+    const isRevoked = certificate.status === "revoked";
 
     return (
-        <Card className="border-green-200 bg-green-50/60 dark:border-green-800 dark:bg-green-950/30">
+        <Card
+            className={
+                isRevoked
+                    ? "border-red-200 bg-red-50/60 dark:border-red-800 dark:bg-red-950/30"
+                    : "border-green-200 bg-green-50/60 dark:border-green-800 dark:bg-green-950/30"
+            }
+        >
             <CardHeader className="pb-4">
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
-                            <ShieldCheck className="h-6 w-6 text-green-600 dark:text-green-400" />
+                        <div
+                            className={
+                                "flex h-11 w-11 shrink-0 items-center justify-center rounded-full " +
+                                (isRevoked
+                                    ? "bg-red-100 dark:bg-red-900"
+                                    : "bg-green-100 dark:bg-green-900")
+                            }
+                        >
+                            <ShieldCheck
+                                className={
+                                    "h-6 w-6 " +
+                                    (isRevoked
+                                        ? "text-red-600 dark:text-red-400"
+                                        : "text-green-600 dark:text-green-400")
+                                }
+                            />
                         </div>
+
                         <div>
-                            <CardTitle className="text-base text-green-800 dark:text-green-200">
-                                Certificate Verified
+                            <CardTitle
+                                className={
+                                    "text-base " +
+                                    (isRevoked
+                                        ? "text-red-800 dark:text-red-200"
+                                        : "text-green-800 dark:text-green-200")
+                                }
+                            >
+                                {isRevoked
+                                    ? "Certificate Revoked"
+                                    : "Certificate Verified"}
                             </CardTitle>
-                            <CardDescription className="text-green-700/70 dark:text-green-400/70">
-                                Authenticated against the official registry.
+
+                            <CardDescription
+                                className={
+                                    isRevoked
+                                        ? "text-red-700/70 dark:text-red-400/70"
+                                        : "text-green-700/70 dark:text-green-400/70"
+                                }
+                            >
+                                {isRevoked
+                                    ? "This certificate has been revoked and is no longer valid."
+                                    : "Authenticated against the official registry."}
                             </CardDescription>
                         </div>
                     </div>
-                    <Badge className="shrink-0 border-green-300 bg-green-100 text-green-800 dark:border-green-700 dark:bg-green-900 dark:text-green-200">
-                        ✓ Authentic
+
+                    <Badge
+                        className={
+                            isRevoked
+                                ? "border-red-300 bg-red-100 text-red-800 dark:border-red-700 dark:bg-red-900 dark:text-red-200"
+                                : "border-green-300 bg-green-100 text-green-800 dark:border-green-700 dark:bg-green-900 dark:text-green-200"
+                        }
+                    >
+                        {isRevoked ? "✕ Revoked" : "✓ Authentic"}
                     </Badge>
                 </div>
             </CardHeader>
 
-            <Separator className="bg-green-200 dark:bg-green-800" />
+            <Separator
+                className={isRevoked ? "bg-red-200 dark:bg-red-800" : "bg-green-200 dark:bg-green-800"}
+            />
 
             <CardContent className="pt-5">
                 <dl className="grid gap-3 sm:grid-cols-3">
                     {[
-                        {
-                            icon: User,
-                            label: "Certificate Holder",
-                            value: cert.name,
-                        },
-                        {
-                            icon: GraduationCap,
-                            label: "Programme",
-                            value: cert.course,
-                        },
+                        { icon: User, label: "Certificate Holder", value: certificate.name },
+                        { icon: GraduationCap, label: "Programme", value: certificate.course },
                         {
                             icon: CalendarDays,
                             label: "Date of Issue",
-                            value: formatDate(cert.issued_at),
+                            value: formatDate(certificate.issued_at),
                         },
                     ].map(({ icon: Icon, label, value }) => (
                         <div
                             key={label}
-                            className="flex flex-col gap-1.5 rounded-lg border border-green-200 bg-white/70 p-3 dark:border-green-800 dark:bg-green-950/50"
+                            className={
+                                "flex flex-col gap-1.5 rounded-lg border p-3 " +
+                                (isRevoked
+                                    ? "border-red-200 bg-white/70 dark:border-red-800 dark:bg-red-950/50"
+                                    : "border-green-200 bg-white/70 dark:border-green-800 dark:bg-green-950/50")
+                            }
                         >
                             <div className="flex items-center gap-1.5">
-                                <Icon className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
-                                <dt className="text-[10px] font-semibold uppercase tracking-widest text-green-700/70 dark:text-green-400/70">
+                                <Icon
+                                    className={
+                                        "h-3.5 w-3.5 " +
+                                        (isRevoked
+                                            ? "text-red-600 dark:text-red-400"
+                                            : "text-green-600 dark:text-green-400")
+                                    }
+                                />
+                                <dt
+                                    className={
+                                        "text-[10px] font-semibold uppercase tracking-widest " +
+                                        (isRevoked
+                                            ? "text-red-700/70 dark:text-red-400/70"
+                                            : "text-green-700/70 dark:text-green-400/70")
+                                    }
+                                >
                                     {label}
                                 </dt>
                             </div>
-                            <dd className="text-sm font-medium text-green-900 dark:text-green-100">
+                            <dd
+                                className={
+                                    "text-sm font-medium " +
+                                    (isRevoked
+                                        ? "text-red-900 dark:text-red-100"
+                                        : "text-green-900 dark:text-green-100")
+                                }
+                            >
                                 {value}
                             </dd>
                         </div>
@@ -146,6 +192,18 @@ function ResultCard({ result }: { result: VerificationResult }) {
                 </dl>
             </CardContent>
         </Card>
+    );
+}
+
+// ── Error card ────────────────────────────────────────────────────────────────
+
+function ErrorCard({ message }: { message: string }) {
+    return (
+        <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Verification Failed</AlertTitle>
+            <AlertDescription>{message}</AlertDescription>
+        </Alert>
     );
 }
 
@@ -169,46 +227,34 @@ const steps = [
     },
 ];
 
-// ── Main Page ─────────────────────────────────────────────────────────────────
+// ── Page ──────────────────────────────────────────────────────────────────────
 
-export default function VerifyPage({ result, queried_hash }: VerifyPageProps) {
-    const [hash, setHash] = useState(queried_hash ?? "");
+export default function VerifyPage() {
+    const { flash } = usePage<SharedProps>().props;
+
+    const [hash, setHash] = useState("");
     const [loading, setLoading] = useState(false);
 
-    /**
-     * Auto-verify: if the page loaded with a queried_hash (i.e. the user
-     * opened a /verify/{hash} URL directly), the backend already ran
-     * verification and returned `result` — no JS navigation needed.
-     * We just pre-fill the input so the user can see what was checked.
-     */
-    useEffect(() => {
-        if (queried_hash) { 
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setHash(queried_hash) 
-        }
-    }, [queried_hash]);
-
-    function verify(value: string) {
-        const trimmed = value.trim();
+    function handleSubmit(e: React.SubmitEvent) {
+        e.preventDefault();
+        const trimmed = hash.trim();
 
         if (!trimmed) {
-            return
-        }
-        
+return;
+}
+
         setLoading(true);
         router.get(
-            `/verify/${encodeURIComponent(trimmed)}`,
+            show({ hash: trimmed }).url,
             {},
             {
                 preserveScroll: true,
-                onFinish: () => setLoading(false),
-            }
+                onFinish: () => {
+                    setLoading(false);
+                    setHash("");
+                },
+            },
         );
-    }
-
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        verify(hash);
     }
 
     return (
@@ -234,8 +280,20 @@ export default function VerifyPage({ result, queried_hash }: VerifyPageProps) {
                     </p>
                 </div>
 
+                {/* ── Flash result ── */}
+                {flash && (
+                    <>
+                        <Separator className="mb-6" />
+                        {flash.type === "success" && flash.certificate ? (
+                            <SuccessCard certificate={flash.certificate} />
+                        ) : (
+                            <ErrorCard message={flash.message} />
+                        )}
+                    </>
+                )}
+
                 {/* ── Manual Input Card ── */}
-                <Card className="mb-6">
+                <Card className="mb-6 mt-10">
                     <CardHeader className="pb-4">
                         <CardTitle className="flex items-center gap-2 text-base">
                             <Hash className="h-4 w-4 text-primary" />
@@ -259,7 +317,7 @@ export default function VerifyPage({ result, queried_hash }: VerifyPageProps) {
                                     disabled={loading}
                                     className="font-mono tracking-wide"
                                     autoComplete="off"
-                                    autoFocus={!queried_hash}
+                                    autoFocus
                                 />
                             </div>
 
@@ -295,16 +353,8 @@ export default function VerifyPage({ result, queried_hash }: VerifyPageProps) {
                     </p>
                 </div>
 
-                {/* ── Result ── */}
-                {result && (
-                    <>
-                        <Separator className="mb-6" />
-                        <ResultCard result={result} />
-                    </>
-                )}
-
-                {/* ── How it works ── */}
-                {!result && (
+                {/* ── How it works — only before any result ── */}
+                {!flash && (
                     <>
                         <Separator className="my-8" />
                         <p className="mb-6 text-center text-xs font-semibold uppercase tracking-widest text-muted-foreground">

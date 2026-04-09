@@ -12,7 +12,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { verify } from '@/routes';
+import { index as verify } from '@/routes/verify';
 
 // ---------------------------------------------------------------------------
 // Animated QR-code security badge (pure SVG — no external deps)

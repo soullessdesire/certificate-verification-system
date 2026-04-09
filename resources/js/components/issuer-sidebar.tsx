@@ -20,8 +20,9 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { issuer, verify } from '@/routes';
+import { issuer } from '@/routes';
 import certificates from '@/routes/certificates';
+import { index as verify } from '@/routes/verify';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [

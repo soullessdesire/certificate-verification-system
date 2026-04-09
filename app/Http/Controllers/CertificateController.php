@@ -10,7 +10,12 @@ use App\Models\AuditLog;
 use Illuminate\Support\Facades\Auth;
 use App\Models\VerificationLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Writer;
 
 class CertificateController extends Controller
 {
@@ -39,7 +44,14 @@ class CertificateController extends Controller
      */
     public function store(StoreCertificateRequest $request)
     {
-        $certificate = Certificate::create($request->validated());
+        $certificate = Certificate::create(
+            [
+                'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                'course' => $request->input('course'),
+                'issued_at' => $request->input('issued_at'),
+                'issued_by' => Auth::id()
+            ]
+        );
 
         AuditLog::create([
             'user_id' => Auth::id(),
@@ -49,37 +61,51 @@ class CertificateController extends Controller
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
         ]);
-        return redirect()->to('issuer/certificates/show', 201);
+
+        return redirect()->route('certificates.show', ['certificate' => $certificate->id]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $hash)
+
+    public function show(Request $request, Certificate $certificate)
     {
-        $certificate = Certificate::where('hash', $hash)->get();
+        $path = $request->user()->hasRole('issuer')
+            ? 'issuer/certificate/show'
+            : 'verify';
 
-        $path = $request->user()->hasRole('issuer') ? 'issuer/certificate/show' : 'verify';
-
+        // Log verification
         VerificationLog::create([
-            'user_id' => $request->user(),
-            'certificate_id' => $certificate,
+            'user_id' => $request->user()->id,
+            'certificate_id' => $certificate->id,
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
         ]);
 
+        $verificationUrl = route('verify.verify', $certificate->hash);
+
+        $renderer = new ImageRenderer(
+            new RendererStyle(300),
+            new SvgImageBackEnd()
+        );
+
+        $writer = new Writer($renderer);
+
+        $qrSvg = $writer->writeString($verificationUrl);
+
         return Inertia::render($path, [
-            'certificate' => $certificate
+            'certificate' => $certificate,
+            'qrSvg' => $qrSvg,
+            'verificationUrl' => $verificationUrl,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $hash)
+    public function edit(Certificate $certificate)
     {
-        $certificate = Certificate::where('hash', $hash)->get();
-
         return Inertia::render('issuer/certificate/edit', [
             'certificate' => $certificate
         ]);
@@ -88,10 +114,8 @@ class CertificateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCertificateRequest $request, string $hash)
+    public function update(UpdateCertificateRequest $request, Certificate $certificate)
     {
-        $certificate = Certificate::where('hash', $hash)->get();
-
         $certificate->update($request->validated());
 
         AuditLog::create([
@@ -103,7 +127,7 @@ class CertificateController extends Controller
             'user_agent' => $request->userAgent(),
             'changes' => 'certificate status has been changed to {$certificate->status}'
         ]);
-        return redirect()->to('issuer/certificates/show', 200);
+        return redirect()->route('certificates.index');
     }
 
     /**

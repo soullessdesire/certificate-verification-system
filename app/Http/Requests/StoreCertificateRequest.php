@@ -12,7 +12,7 @@ class StoreCertificateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()->hasRole('issuer');
     }
 
     /**
@@ -23,7 +23,15 @@ class StoreCertificateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'first_name' => ['required', 'string'],
+            'last_name' => ['required', 'string'],
+            'course' => ['required', 'string'],
+            'issued_at' => [
+                'required',
+                'date',
+                'after_or_equal:2000-01-01',
+                'before_or_equal:today',
+            ],
         ];
     }
 }

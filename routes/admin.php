@@ -13,4 +13,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/reports', [AdminController::class, 'reports'])->name('admin.reports');
     Route::get('/admin/verification-logs', [VerificationLogController::class, 'index'])->name('admin.verification');
     Route::get('/admin/audit-logs', [AuditLogController::class, 'index'])->name('admin.audit');
+
+    Route::delete('/admin/users/{user}', [UserController::class, 'destroy'])->name('user.delete');
 });

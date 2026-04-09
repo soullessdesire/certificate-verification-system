@@ -1,5 +1,3 @@
-// resources/js/pages/issuer/dashboard.tsx
-
 import { Link } from '@inertiajs/react';
 import {
     FileBadge2,
@@ -10,6 +8,7 @@ import {
     Plus,
 } from 'lucide-react';
 
+import { PageHeader } from '@/components/dashboard/page-header';
 import { StatCard } from '@/components/stat-card';
 import { StatusBadge } from '@/components/status-badge';
 import { Button } from '@/components/ui/button';
@@ -20,10 +19,6 @@ import {
     CardTitle,
     CardDescription,
 } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
-import { issuer } from '@/routes';
-import type { IssuerStats, Certificate } from '@/types';
-import { PageHeader } from '@/components/dashboard/page-header';
 import {
     Table,
     TableBody,
@@ -32,6 +27,9 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
+import { issuer } from '@/routes';
+import type { IssuerStats, Certificate } from '@/types';
 
 const breadcrumbs = [{ title: 'Dashboard', href: issuer().url }];
 
@@ -68,8 +66,8 @@ export default function IssuerDashboard({ stats, recent_certificates }: IssuerDa
                         description="All time"
                     />
                     <StatCard
-                        title="Pending Certificates"
-                        value={stats.pending_certificates}
+                        title="Revoked Certificates"
+                        value={stats.revoked_certificates}
                         icon={Clock}
                         description="Awaiting issuance"
                         iconClassName="bg-amber-50 dark:bg-amber-950"
@@ -127,7 +125,7 @@ export default function IssuerDashboard({ stats, recent_certificates }: IssuerDa
                                     recent_certificates.map((cert) => (
                                         <TableRow key={cert.id}>
                                             <TableCell className="font-medium">
-                                                {cert.graduate_name}
+                                                {cert.name}
                                             </TableCell>
                                             <TableCell className="text-muted-foreground">
                                                 {cert.course}
