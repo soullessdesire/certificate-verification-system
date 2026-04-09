@@ -39,8 +39,9 @@ export type VerificationStatus = 'valid' | 'invalid';
 export interface VerificationLog {
     id: string;
     certificate_id: string | null;
+    certificate: Certificate | null;
     certificate_holder: string;
-    verified_at: string;
+    created_at: string;
     status: VerificationStatus;
     ip_address?: string;
 }

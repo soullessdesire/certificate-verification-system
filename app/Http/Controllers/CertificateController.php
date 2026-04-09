@@ -24,7 +24,7 @@ class CertificateController extends Controller
      */
     public function index()
     {
-        $certificates = Certificate::all();
+        $certificates = Certificate::where('id', Auth::id())->get();
 
         return Inertia::render('issuer/certificate/index', [
             'certificates' => $certificates

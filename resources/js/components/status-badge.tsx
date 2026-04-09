@@ -28,19 +28,21 @@ const statusConfig: Record<BadgeStatus, { label: string; className: string }> = 
 };
 
 interface StatusBadgeProps {
-    status: BadgeStatus;
+    status?: BadgeStatus;
     className?: string;
 }
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
-    const config = statusConfig[status];
-
-    return (
-        <Badge
-            variant="outline"
-            className={cn('text-[11px] font-medium', config.className, className)}
-        >
-            {config.label}
-        </Badge>
-    );
+    if(status){
+        const config = statusConfig[status];
+    
+        return (
+            <Badge
+                variant="outline"
+                className={cn('text-[11px] font-medium', config?.className, className)}
+            >
+                {config.label}
+            </Badge>
+        );
+    }
 }

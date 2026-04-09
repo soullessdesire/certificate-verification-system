@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->string('certificate_id')->nullable();
             $table->string('ip_address')->nullable();
+            $table->enum('status', ['invalid', 'revoked', 'valid']);
             $table->text('user_agent')->nullable();
             $table->softDeletes();
             $table->timestamps();

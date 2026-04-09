@@ -16,6 +16,10 @@ class VerificationLog extends Model
         'certificate_id'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime'
+    ];
+
     public $incrementing = false;
 
     protected $keyType = 'string';
@@ -27,5 +31,10 @@ class VerificationLog extends Model
                 $verification_log->id = (string) Str::uuid();
             }
         });
+    }
+
+    public function certificate()
+    {
+        return $this->belongsTo(Certificate::class);
     }
 }

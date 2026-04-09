@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->role('user');
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class, 'issued_by');
+    }
 }

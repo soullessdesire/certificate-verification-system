@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use App\Policies\CertificatePolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
+
+
+#[UsePolicy(CertificatePolicy::class)]
 class Certificate extends Model
 {
     /** @use HasFactory<\Database\Factories\CertificateFactory> */
@@ -24,7 +29,9 @@ class Certificate extends Model
     ];
 
     protected $casts = [
-        'issued_at' => 'datetime'
+        'issued_at' => 'datetime',
+        'create_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     protected $keyType = 'string';
@@ -50,5 +57,10 @@ class Certificate extends Model
     public function getVerificationUrl()
     {
         return url('/verify/{$this->hash}');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'issued_by');
     }
 }

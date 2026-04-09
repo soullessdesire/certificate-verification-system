@@ -10,6 +10,7 @@ import {
     Activity,
 } from 'lucide-react';
 
+import { PageHeader } from '@/components/dashboard/page-header';
 import { StatCard } from '@/components/stat-card';
 import { StatusBadge } from '@/components/status-badge';
 import {
@@ -19,9 +20,6 @@ import {
     CardTitle,
     CardDescription,
 } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
-import type { VerificationLog, AuditLog, AdminStats } from '@/types';
-import { PageHeader } from '@/components/dashboard/page-header';
 import {
     Table,
     TableBody,
@@ -30,6 +28,8 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
+import type { VerificationLog, AuditLog, AdminStats } from '@/types';
 
 // ── Breadcrumb items ──────────────────────────────────────────────────────────
 
@@ -45,6 +45,8 @@ interface AdminDashboardProps {
 // ── Component ────────────────────────────────────────────────────────────────
 
 export default function Dashboard({ stats, recent_verifications, recent_activity }: AdminDashboardProps) {
+    console.log(recent_activity, recent_verifications);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="flex flex-col gap-6 p-6">
@@ -115,16 +117,16 @@ export default function Dashboard({ stats, recent_verifications, recent_activity
                                         recent_verifications.map((v) => (
                                             <TableRow key={v.id}>
                                                 <TableCell className="font-medium">
-                                                    {v.certificate_holder}
+                                                    {v?.certificate?.name}
                                                 </TableCell>
                                                 <TableCell className="font-mono text-xs text-muted-foreground">
-                                                    {v.certificate_id.slice(0, 8)}…
+                                                    {v.certificate_id?.slice(0, 8)}…
                                                 </TableCell>
                                                 <TableCell>
                                                     <StatusBadge status={v.status} />
                                                 </TableCell>
                                                 <TableCell className="text-right text-xs text-muted-foreground">
-                                                    {new Date(v.verified_at).toLocaleString('en-KE', {
+                                                    {new Date(v.created_at).toLocaleString('en-KE', {
                                                         dateStyle: 'medium',
                                                         timeStyle: 'short',
                                                     })}

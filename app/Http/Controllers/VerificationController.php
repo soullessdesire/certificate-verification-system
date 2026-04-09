@@ -31,7 +31,7 @@ class VerificationController
             'ip_address'     => $request->ip(),
             'user_agent'     => $request->userAgent(),
             'certificate_id' => $certificate?->id,
-            'status'         => $certificate ? 'valid' : 'revoked',
+            'status'         => $certificate?->status,
         ]);
 
         if (! $certificate) {

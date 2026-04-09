@@ -19,7 +19,7 @@ class AdminController extends Controller
 
         return Inertia::render('admin/dashboard', [
             'stats' => $stats,
-            'recent_verifications' => VerificationLog::latest()->take(10)->get()->toArray(),
+            'recent_verifications' => VerificationLog::with('certificate')->latest()->take(10)->get()->toArray(),
             'recent_activity' => AuditLog::latest()->take(10)->get()->toArray(),
         ]);
     }
