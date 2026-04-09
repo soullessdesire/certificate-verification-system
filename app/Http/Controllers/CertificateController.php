@@ -49,7 +49,8 @@ class CertificateController extends Controller
                 'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
                 'course' => $request->input('course'),
                 'issued_at' => $request->input('issued_at'),
-                'issued_by' => Auth::id()
+                'issued_by' => Auth::id(),
+                'status' => 'valid'
             ]
         );
 
