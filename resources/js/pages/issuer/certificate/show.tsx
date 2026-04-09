@@ -104,18 +104,6 @@ export default function ShowCertificate({
                                     Verify Link
                                 </Button>
                             </a>
-
-                            {certificate.status !== 'revoked' && (
-                                <Button
-                                    variant="destructive"
-                                    size="sm"
-                                    className="gap-2"
-                                    onClick={handleRevoke}
-                                >
-                                    <ShieldX className="h-4 w-4" />
-                                    Revoke
-                                </Button>
-                            )}
                         </div>
                     }
                 />
