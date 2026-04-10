@@ -28,10 +28,9 @@ import { useInitials } from '@/hooks/use-initials';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 import { about, home, issuer, logout } from '@/routes';
-import { register } from '@/routes';
 import { admin } from '@/routes';
+import { login } from '@/routes';
 import { create as contact } from '@/routes/contact';
-import login from '@/routes/login';
 import { edit } from '@/routes/profile';
 import { index as verify } from '@/routes/verify';
 
@@ -172,7 +171,7 @@ export default function NavBar() {
                                 <UserMenu />
                             ) : (
                                 <>
-                                    <Link href={login.store.definition.url}>
+                                    <Link href={login()}>
                                         <Button variant="ghost">Login</Button>
                                     </Link>
                                 </>
