@@ -1,4 +1,5 @@
 <?php
+
 // database/factories/ContactMessageFactory.php
 
 namespace Database\Factories;
@@ -10,8 +11,8 @@ class ContactMessageFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'         => $this->faker->name(),
-            'email'        => $this->faker->safeEmail(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->safeEmail(),
             'enquiry_type' => $this->faker->randomElement([
                 'Certificate verification issue',
                 'QR code not scanning',
@@ -21,9 +22,9 @@ class ContactMessageFactory extends Factory
                 'General enquiry',
                 'Other',
             ]),
-            'message'  => $this->faker->paragraphs(2, true),
-            'read_at'  => $this->faker->optional(0.4)->dateTimeThisMonth(),
-            'read_by'  => null,
+            'message' => $this->faker->paragraphs(2, true),
+            'read_at' => $this->faker->optional(0.4)->dateTimeThisMonth(),
+            'read_by' => null,
         ];
     }
 

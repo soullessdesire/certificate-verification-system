@@ -51,8 +51,8 @@ interface NotificationsPageProps {
 // ── Breadcrumbs ───────────────────────────────────────────────────────────────
 
 const breadcrumbs = [
-    { title: 'Dashboard',      href: '/admin/dashboard'      },
-    { title: 'Notifications',  href: '/admin/notifications'  },
+    { title: 'Dashboard', href: '/admin/dashboard' },
+    { title: 'Notifications', href: '/admin/notifications' },
 ];
 
 // ── Message Card ──────────────────────────────────────────────────────────────
@@ -106,24 +106,30 @@ function MessageCard({ message }: { message: ContactMessage }) {
                         </div>
 
                         {/* Message body */}
-                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-3">
+                        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
                             {message.message}
                         </p>
 
                         {/* Timestamp */}
                         <div className="flex items-center gap-1 pt-1 text-xs text-muted-foreground">
                             <Clock className="h-3 w-3" />
-                            {new Date(message.created_at).toLocaleString('en-KE', {
-                                dateStyle: 'medium',
-                                timeStyle: 'short',
-                            })}
+                            {new Date(message.created_at).toLocaleString(
+                                'en-KE',
+                                {
+                                    dateStyle: 'medium',
+                                    timeStyle: 'short',
+                                },
+                            )}
                             {isRead && message.read_at && (
                                 <span className="ml-2 text-muted-foreground/60">
                                     · Read{' '}
-                                    {new Date(message.read_at).toLocaleString('en-KE', {
-                                        dateStyle: 'short',
-                                        timeStyle: 'short',
-                                    })}
+                                    {new Date(message.read_at).toLocaleString(
+                                        'en-KE',
+                                        {
+                                            dateStyle: 'short',
+                                            timeStyle: 'short',
+                                        },
+                                    )}
                                 </span>
                             )}
                         </div>
@@ -133,12 +139,16 @@ function MessageCard({ message }: { message: ContactMessage }) {
                 {/* Mark as read action */}
                 {!isRead && (
                     <Link
-                        href={ markRead({ message: message.id }).url}
+                        href={markRead({ message: message.id }).url}
                         method="patch"
                         as="button"
                         className="shrink-0"
                     >
-                        <Button variant="ghost" size="sm" className="gap-1.5 text-xs">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="gap-1.5 text-xs"
+                        >
                             <MailOpen className="h-3.5 w-3.5" />
                             Mark read
                         </Button>
@@ -158,7 +168,6 @@ export default function NotificationsPage({
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="flex flex-col gap-6 p-6">
-
                 <PageHeader
                     title="Notifications"
                     description="Contact form submissions from students, alumni, and employers."
@@ -170,7 +179,11 @@ export default function NotificationsPage({
                                 method="patch"
                                 as="button"
                             >
-                                <Button variant="outline" size="sm" className="gap-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="gap-2"
+                                >
                                     <CheckCheck className="h-4 w-4" />
                                     Mark all read
                                 </Button>
@@ -182,11 +195,13 @@ export default function NotificationsPage({
                 {/* Summary strip */}
                 <div className="flex flex-wrap items-center gap-4">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <span className="font-semibold text-foreground">{messages.total}</span>
+                        <span className="font-semibold text-foreground">
+                            {messages.total}
+                        </span>
                         total messages
                     </div>
                     {unreadCount > 0 && (
-                        <Badge className="gap-1.5 bg-primary/10 text-primary border-primary/20">
+                        <Badge className="gap-1.5 border-primary/20 bg-primary/10 text-primary">
                             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                             {unreadCount} unread
                         </Badge>

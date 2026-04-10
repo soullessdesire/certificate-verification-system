@@ -3,10 +3,9 @@
 use App\Models\Certificate;
 use App\Models\User;
 
-use function Pest\Laravel\get;
 use function Pest\Laravel\actingAs;
+use function Pest\Laravel\get;
 use function Pest\Laravel\post;
-
 
 beforeAll(function () {
     Certificate::factory()->createOne(['status' => 'valid', 'hash' => 'howareyou']);
@@ -42,7 +41,6 @@ test('user gets 404 when certificate hash not found', function () {
 
     $response->assertNotFound();
 });
-
 
 // Pest V4 Certificate Verification Browser Test
 

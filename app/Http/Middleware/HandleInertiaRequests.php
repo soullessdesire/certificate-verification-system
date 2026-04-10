@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\Contactmessage;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -46,7 +47,7 @@ class HandleInertiaRequests extends Middleware
             'flash' => $request->session()->get('flash'),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'unreadNotifications' => $request->user()?->hasRole('admin')
-                ? \App\Models\ContactMessage::whereNull('read_at')->count()
+                ? Contactmessage::whereNull('read_at')->count()
                 : null,
         ];
     }

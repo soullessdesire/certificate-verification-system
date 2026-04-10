@@ -1,7 +1,13 @@
 import { BarChart3, Download } from 'lucide-react';
 import { PageHeader } from '@/components/dashboard/page-header';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+} from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 
@@ -13,19 +19,21 @@ interface ReportSummary {
     period_label: string;
 }
 
-interface ReportsPageProps { summary: ReportSummary }
+interface ReportsPageProps {
+    summary: ReportSummary;
+}
 
 const breadcrumbs = [
     { title: 'Dashboard', href: '/admin/dashboard' },
-    { title: 'Reports',   href: '/admin/reports'   },
+    { title: 'Reports', href: '/admin/reports' },
 ];
 
 export default function ReportsPage({ summary }: ReportsPageProps) {
     const metrics = [
-        { label: 'Certificates Issued',      value: summary.total_certificates  },
-        { label: 'Verification Requests',    value: summary.total_verifications },
-        { label: 'Certificates Revoked',     value: summary.total_revocations   },
-        { label: 'Registered Graduates',     value: summary.total_graduates     },
+        { label: 'Certificates Issued', value: summary.total_certificates },
+        { label: 'Verification Requests', value: summary.total_verifications },
+        { label: 'Certificates Revoked', value: summary.total_revocations },
+        { label: 'Registered Graduates', value: summary.total_graduates },
     ];
 
     return (
@@ -45,14 +53,16 @@ export default function ReportsPage({ summary }: ReportsPageProps) {
 
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <span>Period:</span>
-                    <span className="font-medium text-foreground">{summary.period_label}</span>
+                    <span className="font-medium text-foreground">
+                        {summary.period_label}
+                    </span>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     {metrics.map(({ label, value }) => (
                         <Card key={label}>
                             <CardContent className="p-6">
-                                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                                <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
                                     {label}
                                 </p>
                                 <p className="mt-2 text-3xl font-bold tracking-tight text-foreground">
@@ -67,9 +77,12 @@ export default function ReportsPage({ summary }: ReportsPageProps) {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-base">Generate Custom Report</CardTitle>
+                        <CardTitle className="text-base">
+                            Generate Custom Report
+                        </CardTitle>
                         <CardDescription>
-                            Select a date range and export a detailed report in CSV or PDF format.
+                            Select a date range and export a detailed report in
+                            CSV or PDF format.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-wrap gap-3">

@@ -10,7 +10,6 @@ import { Label } from '@/components/ui/label';
 import SettingsLayout from '@/layouts/settings/layout';
 import { send } from '@/routes/verification';
 
-
 export default function Profile({
     mustVerifyEmail,
     status,

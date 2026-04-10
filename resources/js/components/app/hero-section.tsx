@@ -28,23 +28,28 @@ function QrSecurityBadge() {
 
                 {/* Badge card */}
                 <div className="relative z-10 flex h-44 w-44 flex-col items-center justify-center rounded-2xl border border-border bg-card shadow-sm">
-
                     {/* Verified seal top */}
                     <div className="absolute -top-4 flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-primary shadow">
-                        <CheckCircle2 className="h-4 w-4 text-primary-foreground" strokeWidth={2.5} />
+                        <CheckCircle2
+                            className="h-4 w-4 text-primary-foreground"
+                            strokeWidth={2.5}
+                        />
                     </div>
 
                     {/* Decorative corner marks (QR finder patterns) */}
-                    <CornerMark className="absolute left-3 top-6" />
-                    <CornerMark className="absolute right-3 top-6 scale-x-[-1]" />
+                    <CornerMark className="absolute top-6 left-3" />
+                    <CornerMark className="absolute top-6 right-3 scale-x-[-1]" />
                     <CornerMark className="absolute bottom-6 left-3 scale-y-[-1]" />
 
                     {/* Center QR icon */}
-                    <QrCode className="h-14 w-14 text-foreground/80" strokeWidth={1.2} />
+                    <QrCode
+                        className="h-14 w-14 text-foreground/80"
+                        strokeWidth={1.2}
+                    />
 
                     {/* Animated scan line */}
                     <div
-                        className="pointer-events-none absolute left-4 right-4 h-px bg-primary/70"
+                        className="pointer-events-none absolute right-4 left-4 h-px bg-primary/70"
                         style={{
                             animation: 'scanLine 2.4s ease-in-out infinite',
                         }}
@@ -115,7 +120,9 @@ interface StatProps {
 function Stat({ value, label }: StatProps) {
     return (
         <div className="flex flex-col items-center gap-0.5 sm:items-start">
-            <span className="text-lg font-semibold text-foreground">{value}</span>
+            <span className="text-lg font-semibold text-foreground">
+                {value}
+            </span>
             <span className="text-xs text-muted-foreground">{label}</span>
         </div>
     );
@@ -124,7 +131,13 @@ function Stat({ value, label }: StatProps) {
 // ---------------------------------------------------------------------------
 // Trust pill
 // ---------------------------------------------------------------------------
-function TrustPill({ icon: Icon, label }: { icon: React.ElementType; label: string }) {
+function TrustPill({
+    icon: Icon,
+    label,
+}: {
+    icon: React.ElementType;
+    label: string;
+}) {
     return (
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Icon className="h-3.5 w-3.5 flex-shrink-0 text-primary" />
@@ -154,10 +167,8 @@ export default function HeroSection() {
 
             <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
                 <div className="flex flex-col items-center gap-16 lg:flex-row lg:items-center lg:justify-between">
-
                     {/* ── Left / text column ─────────────────────────────── */}
                     <div className="flex flex-1 flex-col items-center text-center lg:items-start lg:text-left">
-
                         {/* Status badge */}
                         <Badge
                             variant="outline"
@@ -170,22 +181,25 @@ export default function HeroSection() {
                         {/* Headline */}
                         <h1 className="mb-5 max-w-lg text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-[3.25rem] lg:leading-[1.1]">
                             Verify Certificates{' '}
-                            <span className="text-primary">Instantly</span>{' '}
-                            with QR Code
+                            <span className="text-primary">Instantly</span> with
+                            QR Code
                         </h1>
 
                         {/* Sub-headline */}
                         <p className="mb-8 max-w-md text-base leading-relaxed text-muted-foreground">
-                            Authenticate academic credentials and official documents in seconds.
-                            Simply scan the QR code on any certificate — our secure system
-                            returns a tamper-evident result in real time.
+                            Authenticate academic credentials and official
+                            documents in seconds. Simply scan the QR code on any
+                            certificate — our secure system returns a
+                            tamper-evident result in real time.
                         </p>
 
                         {/* CTA buttons */}
                         <div className="mb-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-                            <Link 
-                                href={verify()}>
-                                <Button size="lg" className="gap-2 px-6 font-medium shadow-sm">
+                            <Link href={verify()}>
+                                <Button
+                                    size="lg"
+                                    className="gap-2 px-6 font-medium shadow-sm"
+                                >
                                     <QrCode className="h-4 w-4" />
                                     Verify Certificate
                                 </Button>
@@ -202,30 +216,47 @@ export default function HeroSection() {
 
                         {/* Trust signals */}
                         <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:justify-start">
-                            <TrustPill icon={ShieldCheck} label="Tamper-evident records" />
-                            <TrustPill icon={Lock} label="End-to-end encrypted" />
+                            <TrustPill
+                                icon={ShieldCheck}
+                                label="Tamper-evident records"
+                            />
+                            <TrustPill
+                                icon={Lock}
+                                label="End-to-end encrypted"
+                            />
                             <TrustPill icon={Clock} label="Available 24/7" />
                         </div>
                     </div>
 
                     {/* ── Right / visual column ──────────────────────────── */}
                     <div className="flex flex-shrink-0 flex-col items-center gap-6 lg:w-[340px]">
-
                         {/* QR badge */}
                         <QrSecurityBadge />
 
                         {/* How-it-works mini-steps */}
                         <div className="w-full rounded-xl border border-border bg-card p-4 shadow-sm">
-                            <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                            <p className="mb-3 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
                                 How it works
                             </p>
                             <ol className="space-y-3">
                                 {[
-                                    { step: '01', text: 'Scan the QR code on the certificate' },
-                                    { step: '02', text: 'System validates the unique certificate ID' },
-                                    { step: '03', text: 'Receive instant verification result' },
+                                    {
+                                        step: '01',
+                                        text: 'Scan the QR code on the certificate',
+                                    },
+                                    {
+                                        step: '02',
+                                        text: 'System validates the unique certificate ID',
+                                    },
+                                    {
+                                        step: '03',
+                                        text: 'Receive instant verification result',
+                                    },
                                 ].map(({ step, text }) => (
-                                    <li key={step} className="flex items-start gap-3">
+                                    <li
+                                        key={step}
+                                        className="flex items-start gap-3"
+                                    >
                                         <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-primary/10 text-[11px] font-bold text-primary">
                                             {step}
                                         </span>

@@ -25,21 +25,20 @@ class VerificationController
     {
         $certificate = Certificate::where('hash', $hash)->first();
 
-
         // Log every attempt — valid or not
         VerificationLog::create([
-            'user_id'        => Auth::id(),
-            'ip_address'     => $request->ip(),
-            'user_agent'     => $request->userAgent(),
+            'user_id' => Auth::id(),
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
             'certificate_id' => $certificate?->id,
-            'status'         => $certificate ? $certificate?->status : 'invalid',
+            'status' => $certificate ? $certificate?->status : 'invalid',
         ]);
 
         if (! $certificate) {
             return redirect()
                 ->route('verify.index')
                 ->with('flash', [
-                    'type'    => 'error',
+                    'type' => 'error',
                     'message' => 'Certificate not found. The code may be incorrect or the certificate may have been revoked.',
                 ]);
         }
@@ -47,34 +46,35 @@ class VerificationController
         return redirect()
             ->route('verify.index')
             ->with('flash', [
-                'type'        => 'success',
-                'message'     => 'Certificate verified successfully.',
+                'type' => 'success',
+                'message' => 'Certificate verified successfully.',
                 'certificate' => [
                     'name' => $certificate->name,
-                    'course'        => $certificate->course,
-                    'issued_at'     => $certificate->issued_at,
-                    'status'        => $certificate->status,
+                    'course' => $certificate->course,
+                    'issued_at' => $certificate->issued_at,
+                    'status' => $certificate->status,
                 ],
             ]);
     }
+
     public function verify(Request $request, string $hash)
     {
         $certificate = Certificate::where('hash', $hash)->first();
 
         // Log every attempt — valid or not
         VerificationLog::create([
-            'user_id'        => Auth::id(),
-            'ip_address'     => $request->ip(),
-            'user_agent'     => $request->userAgent(),
+            'user_id' => Auth::id(),
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
             'certificate_id' => $certificate?->id,
-            'status'         => $certificate ? 'valid' : 'invalid',
+            'status' => $certificate ? 'valid' : 'invalid',
         ]);
 
         if (! $certificate) {
             return redirect()
                 ->route('verify.index')
                 ->with('flash', [
-                    'type'    => 'error',
+                    'type' => 'error',
                     'message' => 'Certificate not found. The code may be incorrect or the certificate may have been revoked.',
                 ]);
         }
@@ -82,13 +82,13 @@ class VerificationController
         return redirect()
             ->route('verify.index')
             ->with('flash', [
-                'type'        => 'success',
-                'message'     => 'Certificate verified successfully.',
+                'type' => 'success',
+                'message' => 'Certificate verified successfully.',
                 'certificate' => [
                     'name' => $certificate->name,
-                    'course'        => $certificate->course,
-                    'issued_at'     => $certificate->issued_at,
-                    'status'        => $certificate->status,
+                    'course' => $certificate->course,
+                    'issued_at' => $certificate->issued_at,
+                    'status' => $certificate->status,
                 ],
             ]);
     }

@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import type { LucideIcon } from 'lucide-react';
-import { Home, ArrowLeft} from 'lucide-react';
+import { Home, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -23,9 +23,8 @@ export default function ErrorLayout({
 }: ErrorLayoutProps) {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 text-center">
-
             {/* Error code */}
-            <p className="mb-2 text-[80px] font-bold leading-none tracking-tighter text-foreground/10 sm:text-[120px]">
+            <p className="mb-2 text-[80px] leading-none font-bold tracking-tighter text-foreground/10 sm:text-[120px]">
                 {code}
             </p>
 
@@ -33,7 +32,7 @@ export default function ErrorLayout({
             <div
                 className={cn(
                     '-mt-6 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border bg-card shadow-sm',
-                    iconClassName
+                    iconClassName,
                 )}
             >
                 <Icon className="h-8 w-8" />
@@ -71,7 +70,8 @@ export default function ErrorLayout({
 
             {/* Footer note */}
             <p className="mt-12 text-xs text-muted-foreground">
-                Meru University of Science and Technology &mdash; Certificate Verification System
+                Meru University of Science and Technology &mdash; Certificate
+                Verification System
             </p>
         </div>
     );

@@ -17,7 +17,7 @@ trait ProfileValidationRules
         return [
             'name' => $this->nameRules(),
             'email' => $this->emailRules($userId),
-            'role' => ['nullable', 'in:admin,issuer']
+            'role' => ['nullable', 'in:admin,issuer'],
         ];
     }
 

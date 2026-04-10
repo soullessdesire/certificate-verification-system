@@ -1,13 +1,20 @@
 /* eslint-disable react-hooks/static-components */
-import type { PageProps } from "@inertiajs/core";
-import { usePage, Link } from "@inertiajs/react";
-import { Menu, X, ShieldCheck, LayoutDashboard, LogOut, User } from "lucide-react";
-import { useState } from "react";
+import type { PageProps } from '@inertiajs/core';
+import { usePage, Link } from '@inertiajs/react';
+import {
+    Menu,
+    X,
+    ShieldCheck,
+    LayoutDashboard,
+    LogOut,
+    User,
+} from 'lucide-react';
+import { useState } from 'react';
 
-import ThemeToggle from "@/components/theme-toggle";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import ThemeToggle from '@/components/theme-toggle';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,40 +22,37 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
+import { useInitials } from '@/hooks/use-initials';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-import { useInitials } from "@/hooks/use-initials";
-import { useIsMobile } from "@/hooks/use-mobile";
-
-import { about,home, issuer, logout} from "@/routes";
-import { register } from "@/routes";
-import { admin } from "@/routes";
-import { create as contact } from '@/routes/contact'
-import login from "@/routes/login";
-import { edit } from "@/routes/profile";
+import { about, home, issuer, logout } from '@/routes';
+import { register } from '@/routes';
+import { admin } from '@/routes';
+import { create as contact } from '@/routes/contact';
+import login from '@/routes/login';
+import { edit } from '@/routes/profile';
 import { index as verify } from '@/routes/verify';
 
-
-const INSTITUTION = "Meru University of Science and Technology";
+const INSTITUTION = 'Meru University of Science and Technology';
 
 export default function NavBar() {
     const { auth } = usePage<PageProps>().props;
-    const url =  auth.is_admin ? admin().url : issuer().url
+    const url = auth.is_admin ? admin().url : issuer().url;
 
     const isMobile = useIsMobile();
     const [open, setOpen] = useState(false);
     const getInitials = useInitials();
 
     const navItems = [
-        { href: home().url,    label: "Home"    },
-        { href: verify().url,  label: "Verify"  },
-        { href: about().url,   label: "About"   },
-        { href: contact().url, label: "Contact" },
+        { href: home().url, label: 'Home' },
+        { href: verify().url, label: 'Verify' },
+        { href: about().url, label: 'About' },
+        { href: contact().url, label: 'Contact' },
     ];
 
-    const path =
-        typeof window !== "undefined" ? window.location.pathname : "";
+    const path = typeof window !== 'undefined' ? window.location.pathname : '';
 
     const navLink = (href: string, label: string) => (
         <Link
@@ -56,8 +60,8 @@ export default function NavBar() {
             href={href}
             className={`text-sm transition ${
                 path === href
-                    ? "font-semibold text-primary"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? 'font-semibold text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
             }`}
         >
             {label}
@@ -82,7 +86,7 @@ export default function NavBar() {
 
                 <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel className="flex flex-col gap-0.5">
-                        <span className="text-sm font-medium leading-none">
+                        <span className="text-sm leading-none font-medium">
                             {auth.user.name}
                         </span>
                         <span className="text-xs font-normal text-muted-foreground">
@@ -92,23 +96,29 @@ export default function NavBar() {
 
                     <DropdownMenuSeparator />
 
-                    <DropdownMenuLabel className="text-[10px] font-normal uppercase tracking-widest text-muted-foreground">
+                    <DropdownMenuLabel className="text-[10px] font-normal tracking-widest text-muted-foreground uppercase">
                         {INSTITUTION}
                     </DropdownMenuLabel>
 
                     <DropdownMenuSeparator />
 
-                    { (auth.is_admin || auth.is_issuer) && (
+                    {(auth.is_admin || auth.is_issuer) && (
                         <DropdownMenuItem asChild>
-                            <Link href={url} className="flex cursor-pointer items-center gap-2">
+                            <Link
+                                href={url}
+                                className="flex cursor-pointer items-center gap-2"
+                            >
                                 <LayoutDashboard className="h-4 w-4" />
                                 Dashboard
                             </Link>
                         </DropdownMenuItem>
-                    ) }
+                    )}
 
                     <DropdownMenuItem asChild>
-                        <Link href={edit()} className="flex cursor-pointer items-center gap-2">
+                        <Link
+                            href={edit()}
+                            className="flex cursor-pointer items-center gap-2"
+                        >
                             <User className="h-4 w-4" />
                             Profile
                         </Link>
@@ -116,7 +126,10 @@ export default function NavBar() {
 
                     <DropdownMenuSeparator />
 
-                    <DropdownMenuItem asChild className="text-destructive focus:text-destructive">
+                    <DropdownMenuItem
+                        asChild
+                        className="text-destructive focus:text-destructive"
+                    >
                         <Link
                             href={logout()}
                             method="post"
@@ -134,9 +147,11 @@ export default function NavBar() {
     return (
         <nav className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur">
             <div className="flex items-center justify-between px-6 py-4">
-
                 {/* Logo */}
-                <Link href="/" className="flex items-center gap-2 font-semibold">
+                <Link
+                    href="/"
+                    className="flex items-center gap-2 font-semibold"
+                >
                     <ShieldCheck size={20} className="text-primary" />
                     CertVerify
                 </Link>
@@ -145,7 +160,9 @@ export default function NavBar() {
                 {!isMobile && (
                     <>
                         <div className="flex items-center gap-6">
-                            {navItems.map((item) => navLink(item.href, item.label))}
+                            {navItems.map((item) =>
+                                navLink(item.href, item.label),
+                            )}
                         </div>
 
                         <div className="flex items-center gap-3">
@@ -168,7 +185,7 @@ export default function NavBar() {
                 {isMobile && (
                     <div className="flex items-center gap-2">
                         <ThemeToggle />
-                        {auth?.user && (<UserMenu />)}
+                        {auth?.user && <UserMenu />}
                         <Button
                             variant="ghost"
                             size="icon"
@@ -186,7 +203,7 @@ export default function NavBar() {
                     {navItems.map((item) => navLink(item.href, item.label))}
 
                     {auth?.user ? (
-                        navLink(url, "Dashboard")
+                        navLink(url, 'Dashboard')
                     ) : (
                         <>
                             <Link href={register()}>

@@ -15,7 +15,7 @@ class EnsureIsResgisteredMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user()) {
+        if (! $request->user()) {
             abort(403);
         }
 

@@ -8,7 +8,12 @@ interface PageHeaderProps {
     actions?: React.ReactNode;
 }
 
-export function PageHeader({ title, description, icon: Icon, actions }: PageHeaderProps) {
+export function PageHeader({
+    title,
+    description,
+    icon: Icon,
+    actions,
+}: PageHeaderProps) {
     return (
         <>
             <div className="flex items-start justify-between gap-4">
@@ -23,11 +28,17 @@ export function PageHeader({ title, description, icon: Icon, actions }: PageHead
                             {title}
                         </h1>
                         {description && (
-                            <p className="text-sm text-muted-foreground">{description}</p>
+                            <p className="text-sm text-muted-foreground">
+                                {description}
+                            </p>
                         )}
                     </div>
                 </div>
-                {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+                {actions && (
+                    <div className="flex shrink-0 items-center gap-2">
+                        {actions}
+                    </div>
+                )}
             </div>
             <Separator className="my-5" />
         </>

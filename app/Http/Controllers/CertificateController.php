@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Fortify\VerifyCertificate;
-use App\Models\Certificate;
 use App\Http\Requests\StoreCertificateRequest;
 use App\Http\Requests\UpdateCertificateRequest;
 use App\Models\AuditLog;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Certificate;
 use App\Models\VerificationLog;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Inertia\Inertia;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
-use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Writer;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class CertificateController extends Controller
 {
@@ -27,7 +25,7 @@ class CertificateController extends Controller
         $certificates = Certificate::where('issued_by', Auth::id())->get();
 
         return Inertia::render('issuer/certificate/index', [
-            'certificates' => $certificates
+            'certificates' => $certificates,
         ]);
     }
 
@@ -46,11 +44,11 @@ class CertificateController extends Controller
     {
         $certificate = Certificate::create(
             [
-                'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                'name' => $request->input('first_name').' '.$request->input('last_name'),
                 'course' => $request->input('course'),
                 'issued_at' => $request->input('issued_at'),
                 'issued_by' => Auth::id(),
-                'status' => 'valid'
+                'status' => 'valid',
             ]
         );
 
@@ -69,7 +67,6 @@ class CertificateController extends Controller
     /**
      * Display the specified resource.
      */
-
     public function show(Request $request, Certificate $certificate)
     {
         $path = $request->user()->hasRole('issuer')
@@ -88,7 +85,7 @@ class CertificateController extends Controller
 
         $renderer = new ImageRenderer(
             new RendererStyle(300),
-            new SvgImageBackEnd()
+            new SvgImageBackEnd
         );
 
         $writer = new Writer($renderer);
@@ -108,7 +105,7 @@ class CertificateController extends Controller
     public function edit(Certificate $certificate)
     {
         return Inertia::render('issuer/certificate/edit', [
-            'certificate' => $certificate
+            'certificate' => $certificate,
         ]);
     }
 
@@ -126,8 +123,9 @@ class CertificateController extends Controller
             'model_id' => $certificate->id,
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
-            'changes' => 'certificate status has been changed to {$certificate->status}'
+            'changes' => 'certificate status has been changed to {$certificate->status}',
         ]);
+
         return redirect()->route('certificates.index');
     }
 
@@ -144,7 +142,7 @@ class CertificateController extends Controller
             'model_type' => Certificate::class,
             'model_id' => $certificate->id,
             'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent()
+            'user_agent' => $request->userAgent(),
         ]);
         $certificate->delete();
 

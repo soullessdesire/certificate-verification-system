@@ -38,11 +38,13 @@ interface IssuerDashboardProps {
     recent_certificates: Certificate[];
 }
 
-export default function IssuerDashboard({ stats, recent_certificates }: IssuerDashboardProps) {
+export default function IssuerDashboard({
+    stats,
+    recent_certificates,
+}: IssuerDashboardProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="flex flex-col gap-6 p-6">
-
                 <PageHeader
                     title="Issuer Dashboard"
                     description="Manage and track certificates you have issued."
@@ -88,7 +90,9 @@ export default function IssuerDashboard({ stats, recent_certificates }: IssuerDa
                             <div className="flex items-center gap-2">
                                 <ShieldCheck className="h-4 w-4 text-primary" />
                                 <div>
-                                    <CardTitle className="text-base">Recent Certificates</CardTitle>
+                                    <CardTitle className="text-base">
+                                        Recent Certificates
+                                    </CardTitle>
                                     <CardDescription>
                                         The most recently issued certificates.
                                     </CardDescription>
@@ -131,12 +135,16 @@ export default function IssuerDashboard({ stats, recent_certificates }: IssuerDa
                                                 {cert.course}
                                             </TableCell>
                                             <TableCell className="text-sm text-muted-foreground">
-                                                {new Date(cert.issued_at).toLocaleDateString('en-KE', {
+                                                {new Date(
+                                                    cert.issued_at,
+                                                ).toLocaleDateString('en-KE', {
                                                     dateStyle: 'medium',
                                                 })}
                                             </TableCell>
                                             <TableCell>
-                                                <StatusBadge status={cert.status} />
+                                                <StatusBadge
+                                                    status={cert.status}
+                                                />
                                             </TableCell>
                                         </TableRow>
                                     ))

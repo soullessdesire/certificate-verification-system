@@ -16,11 +16,11 @@ class AuditLog extends Model
         'model_id',
         'changes',
         'ip_address',
-        'user_agent'
+        'user_agent',
     ];
 
     protected $casts = [
-        'created_at' => 'datetime'
+        'created_at' => 'datetime',
     ];
 
     protected static function booted()

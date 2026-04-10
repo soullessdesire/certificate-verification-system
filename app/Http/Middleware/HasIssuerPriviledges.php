@@ -15,9 +15,10 @@ class HasIssuerPriviledges
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user() || ! $request->user()->hasRole('issuer')) {
+        if (! $request->user() || ! $request->user()->hasRole('issuer')) {
             abort(404);
         }
+
         return $next($request);
     }
 }

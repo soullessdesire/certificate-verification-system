@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuditLog;
-use Inertia\Inertia;
 use App\Models\Certificate;
 use App\Models\VerificationLog;
+use Inertia\Inertia;
 
 class AdminController extends Controller
 {
@@ -14,7 +14,7 @@ class AdminController extends Controller
         $stats = [
             'total_certificates' => Certificate::count(),
             'verification_request_24h' => VerificationLog::count(),
-            'revoked_certificates' => Certificate::where('status', 'revoked')->get()->count()
+            'revoked_certificates' => Certificate::where('status', 'revoked')->get()->count(),
         ];
 
         return Inertia::render('admin/dashboard', [
@@ -30,8 +30,8 @@ class AdminController extends Controller
             'summary' => [
                 'total_certificates' => Certificate::count(),
                 'total_revocations' => Certificate::where('status', 'revoked')->get()->count(),
-                'total_verifications' => VerificationLog::count()
-            ]
+                'total_verifications' => VerificationLog::count(),
+            ],
         ]);
     }
 }

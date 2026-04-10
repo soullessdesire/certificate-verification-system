@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactmessageRequest;
 use App\Models\ContactMessage;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -29,7 +28,7 @@ class ContactMessageController extends Controller
         return redirect()
             ->route('contact.create')
             ->with('flash', [
-                'type'    => 'success',
+                'type' => 'success',
                 'message' => 'Your message has been received. We will respond within 1–2 working days.',
             ]);
     }
@@ -45,7 +44,7 @@ class ContactMessageController extends Controller
         $unreadCount = ContactMessage::whereNull('read_at')->count();
 
         return Inertia::render('admin/notifications', [
-            'messages'    => $messages,
+            'messages' => $messages,
             'unreadCount' => $unreadCount,
         ]);
     }

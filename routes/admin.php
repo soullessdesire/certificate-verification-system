@@ -1,12 +1,11 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerificationLogController;
-use App\Http\Controllers\AuditLogController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ContactMessageController;
-
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin');
@@ -20,10 +19,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/users/{user}', [UserController::class, 'destroy'])->name('user.delete');
 });
 
-
 // ── Admin (auth + admin role) ─────────────────────────────────────────────────
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/notifications',              [ContactMessageController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications', [ContactMessageController::class, 'index'])->name('notifications.index');
     Route::patch('/notifications/{message}/read', [ContactMessageController::class, 'markRead'])->name('notifications.read');
-    Route::patch('/notifications/read-all',   [ContactMessageController::class, 'markAllRead'])->name('notifications.readAll');
+    Route::patch('/notifications/read-all', [ContactMessageController::class, 'markAllRead'])->name('notifications.readAll');
 });

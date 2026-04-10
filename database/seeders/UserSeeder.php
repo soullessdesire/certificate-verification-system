@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
@@ -22,12 +21,12 @@ class UserSeeder extends Seeder
         User::factory()
             ->count(1)
             ->create()
-            ->each(fn($user) => $user->assignRole($adminRole));
+            ->each(fn ($user) => $user->assignRole($adminRole));
 
         // Create 5 issuer users
         User::factory()
             ->count(5)
             ->create()
-            ->each(fn($user) => $user->assignRole($issuerRole));
+            ->each(fn ($user) => $user->assignRole($issuerRole));
     }
 }

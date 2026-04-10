@@ -44,13 +44,16 @@ interface AdminDashboardProps {
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export default function Dashboard({ stats, recent_verifications, recent_activity }: AdminDashboardProps) {
+export default function Dashboard({
+    stats,
+    recent_verifications,
+    recent_activity,
+}: AdminDashboardProps) {
     console.log(recent_activity, recent_verifications);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="flex flex-col gap-6 p-6">
-
                 <PageHeader
                     title="Admin Dashboard"
                     description="Platform overview and recent activity."
@@ -83,24 +86,31 @@ export default function Dashboard({ stats, recent_verifications, recent_activity
 
                 {/* ── Bottom row ── */}
                 <div className="grid gap-6 xl:grid-cols-[1fr_380px]">
-
                     {/* Recent Verifications */}
                     <Card>
                         <CardHeader className="pb-3">
                             <div className="flex items-center gap-2">
                                 <ShieldCheck className="h-4 w-4 text-primary" />
-                                <CardTitle className="text-base">Recent Verifications</CardTitle>
+                                <CardTitle className="text-base">
+                                    Recent Verifications
+                                </CardTitle>
                             </div>
-                            <CardDescription>Latest certificate verification requests.</CardDescription>
+                            <CardDescription>
+                                Latest certificate verification requests.
+                            </CardDescription>
                         </CardHeader>
                         <CardContent className="p-0">
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Certificate Holder</TableHead>
+                                        <TableHead>
+                                            Certificate Holder
+                                        </TableHead>
                                         <TableHead>Certificate ID</TableHead>
                                         <TableHead>Status</TableHead>
-                                        <TableHead className="text-right">Verified At</TableHead>
+                                        <TableHead className="text-right">
+                                            Verified At
+                                        </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -120,13 +130,21 @@ export default function Dashboard({ stats, recent_verifications, recent_activity
                                                     {v?.certificate?.name}
                                                 </TableCell>
                                                 <TableCell className="font-mono text-xs text-muted-foreground">
-                                                    {v.certificate_id?.slice(0, 8)}…
+                                                    {v.certificate_id?.slice(
+                                                        0,
+                                                        8,
+                                                    )}
+                                                    …
                                                 </TableCell>
                                                 <TableCell>
-                                                    <StatusBadge status={v.status} />
+                                                    <StatusBadge
+                                                        status={v.status}
+                                                    />
                                                 </TableCell>
                                                 <TableCell className="text-right text-xs text-muted-foreground">
-                                                    {new Date(v.created_at).toLocaleString('en-KE', {
+                                                    {new Date(
+                                                        v.created_at,
+                                                    ).toLocaleString('en-KE', {
                                                         dateStyle: 'medium',
                                                         timeStyle: 'short',
                                                     })}
@@ -144,9 +162,13 @@ export default function Dashboard({ stats, recent_verifications, recent_activity
                         <CardHeader className="pb-3">
                             <div className="flex items-center gap-2">
                                 <Activity className="h-4 w-4 text-primary" />
-                                <CardTitle className="text-base">System Activity</CardTitle>
+                                <CardTitle className="text-base">
+                                    System Activity
+                                </CardTitle>
                             </div>
-                            <CardDescription>Recent actions across the platform.</CardDescription>
+                            <CardDescription>
+                                Recent actions across the platform.
+                            </CardDescription>
                         </CardHeader>
                         <CardContent>
                             {recent_activity.length === 0 ? (
@@ -156,17 +178,22 @@ export default function Dashboard({ stats, recent_verifications, recent_activity
                             ) : (
                                 <ol className="space-y-4">
                                     {recent_activity.map((log) => (
-                                        <li key={log.id} className="flex items-start gap-3">
+                                        <li
+                                            key={log.id}
+                                            className="flex items-start gap-3"
+                                        >
                                             <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted">
                                                 <ShieldAlert className="h-3.5 w-3.5 text-muted-foreground" />
                                             </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-medium leading-none text-foreground truncate">
+                                            <div className="min-w-0 flex-1">
+                                                <p className="truncate text-sm leading-none font-medium text-foreground">
                                                     {log.description}
                                                 </p>
                                                 <p className="mt-1 text-xs text-muted-foreground">
                                                     {log.user?.name} &middot;{' '}
-                                                    {new Date(log.created_at).toLocaleString('en-KE', {
+                                                    {new Date(
+                                                        log.created_at,
+                                                    ).toLocaleString('en-KE', {
                                                         dateStyle: 'short',
                                                         timeStyle: 'short',
                                                     })}

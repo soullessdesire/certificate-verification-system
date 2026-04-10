@@ -1,4 +1,5 @@
 <?php
+
 // database/seeders/ContactMessageSeeder.php
 
 namespace Database\Seeders;

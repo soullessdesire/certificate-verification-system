@@ -4,13 +4,10 @@ namespace App\Actions\Fortify;
 
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
+use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use App\Models\Role;
-use App\Models\AuditLog;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Certificate;
 
 class CreateNewUser implements CreatesNewUsers
 {

@@ -23,24 +23,31 @@ export function StatCard({
         <Card>
             <CardContent className="p-6">
                 <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground truncate">
+                    <div className="min-w-0 flex-1">
+                        <p className="truncate text-xs font-semibold tracking-widest text-muted-foreground uppercase">
                             {title}
                         </p>
                         <p className="mt-2 text-3xl font-bold tracking-tight text-foreground">
-                            {typeof value === 'number' ? value.toLocaleString() : value}
+                            {typeof value === 'number'
+                                ? value.toLocaleString()
+                                : value}
                         </p>
                         {description && (
-                            <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+                            <p className="mt-1 text-xs text-muted-foreground">
+                                {description}
+                            </p>
                         )}
                         {trend && (
                             <p
                                 className={cn(
                                     'mt-1 text-xs font-medium',
-                                    trend.value >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500',
+                                    trend.value >= 0
+                                        ? 'text-green-600 dark:text-green-400'
+                                        : 'text-red-500',
                                 )}
                             >
-                                {trend.value >= 0 ? '↑' : '↓'} {Math.abs(trend.value)}% {trend.label}
+                                {trend.value >= 0 ? '↑' : '↓'}{' '}
+                                {Math.abs(trend.value)}% {trend.label}
                             </p>
                         )}
                     </div>

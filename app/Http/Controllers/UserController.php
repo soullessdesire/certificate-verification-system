@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\User;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -15,7 +14,7 @@ class UserController extends Controller
         $users = User::with('roles')->get();
 
         return Inertia::render('admin/users', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
@@ -50,6 +49,7 @@ class UserController extends Controller
 
         if ($request->user()->hasRole('admin')) {
             $user->delete();
+
             return redirect()->back()->with('success', 'You have successfully deleted the user');
         }
 

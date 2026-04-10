@@ -23,7 +23,7 @@ createInertiaApp({
             <StrictMode>
                 <TooltipProvider delayDuration={0}>
                     <App {...props} />
-                    <Toaster position='top-left'></Toaster>
+                    <Toaster position="top-left"></Toaster>
                 </TooltipProvider>
             </StrictMode>,
         );

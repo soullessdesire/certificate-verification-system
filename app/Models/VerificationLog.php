@@ -13,11 +13,11 @@ class VerificationLog extends Model
         'user_id',
         'ip_address',
         'user_agent',
-        'certificate_id'
+        'certificate_id',
     ];
 
     protected $casts = [
-        'created_at' => 'datetime'
+        'created_at' => 'datetime',
     ];
 
     public $incrementing = false;

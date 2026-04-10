@@ -23,7 +23,7 @@ class UpdateCertificateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'in:invalid,valid,revoked'
+            'status' => 'in:invalid,valid,revoked',
         ];
     }
 }

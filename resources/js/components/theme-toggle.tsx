@@ -11,8 +11,8 @@ interface IconAppearanceToggleProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const options: { value: Appearance; icon: LucideIcon; label: string }[] = [
-    { value: 'light', icon: Sun,  label: 'Light mode' },
-    { value: 'dark',  icon: Moon, label: 'Dark mode'  },
+    { value: 'light', icon: Sun, label: 'Light mode' },
+    { value: 'dark', icon: Moon, label: 'Dark mode' },
 ];
 
 export default function ThemeToggle({
@@ -45,7 +45,7 @@ export default function ThemeToggle({
                     className="transition-transform duration-200 ease-in-out"
                     aria-hidden
                 />
-                <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-primary ring-1 ring-background" />
+                <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-primary ring-1 ring-background" />
             </Button>
         </div>
     );

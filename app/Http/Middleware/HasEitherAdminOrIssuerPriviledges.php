@@ -17,7 +17,7 @@ class HasEitherAdminOrIssuerPriviledges
     {
         $user = $request->user();
 
-        if (!$user) {
+        if (! $user) {
             abort(403); // not logged in
         }
 

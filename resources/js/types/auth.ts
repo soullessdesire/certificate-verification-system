@@ -12,18 +12,18 @@ export type User = {
 };
 
 export type Role = {
-    id: number,
-    name: string,
-    guard_name: 'web',
-    created_at: string,
-    updated_at: string,
-}
+    id: number;
+    name: string;
+    guard_name: 'web';
+    created_at: string;
+    updated_at: string;
+};
 
 export type Auth = {
     user: User;
-    is_admin : boolean;
+    is_admin: boolean;
     is_issuer: boolean;
-}; 
+};
 
 export type TwoFactorSetupData = {
     svg: string;

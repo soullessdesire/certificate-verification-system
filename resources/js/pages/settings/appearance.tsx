@@ -3,7 +3,6 @@ import AppearanceTabs from '@/components/appearance-tabs';
 import Heading from '@/components/heading';
 import SettingsLayout from '@/layouts/settings/layout';
 
-
 export default function Appearance() {
     return (
         <>

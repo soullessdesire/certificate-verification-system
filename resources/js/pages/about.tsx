@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link } from '@inertiajs/react';
 import {
     ShieldCheck,
     QrCode,
@@ -10,79 +10,79 @@ import {
     Building2,
     GraduationCap,
     BadgeCheck,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import MainAppLayout from "@/layouts/main-app-layout";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import MainAppLayout from '@/layouts/main-app-layout';
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
 const features = [
     {
         icon: QrCode,
-        title: "QR Code Authentication",
+        title: 'QR Code Authentication',
         description:
-            "Every issued certificate carries a unique QR code that links directly to a tamper-evident record in our secure registry.",
+            'Every issued certificate carries a unique QR code that links directly to a tamper-evident record in our secure registry.',
     },
     {
         icon: Lock,
-        title: "End-to-End Encrypted",
+        title: 'End-to-End Encrypted',
         description:
-            "All verification requests are transmitted over TLS and validated against cryptographically signed records.",
+            'All verification requests are transmitted over TLS and validated against cryptographically signed records.',
     },
     {
         icon: Clock,
-        title: "Real-Time Results",
+        title: 'Real-Time Results',
         description:
-            "Validation queries return in under 3 seconds — no waiting, no manual cross-checking.",
+            'Validation queries return in under 3 seconds — no waiting, no manual cross-checking.',
     },
     {
         icon: Globe,
-        title: "Globally Accessible",
+        title: 'Globally Accessible',
         description:
-            "The portal is available 24/7 to employers, academic institutions, and government bodies worldwide.",
+            'The portal is available 24/7 to employers, academic institutions, and government bodies worldwide.',
     },
     {
         icon: BadgeCheck,
-        title: "Tamper-Evident Records",
+        title: 'Tamper-Evident Records',
         description:
-            "Certificate data is stored with integrity checks. Any alteration to a physical or digital certificate is immediately detected.",
+            'Certificate data is stored with integrity checks. Any alteration to a physical or digital certificate is immediately detected.',
     },
     {
         icon: BookOpen,
-        title: "Full Academic Scope",
+        title: 'Full Academic Scope',
         description:
-            "Supports verification of all certificates issued by MUST — undergraduate, postgraduate, and professional programmes.",
+            'Supports verification of all certificates issued by MUST — undergraduate, postgraduate, and professional programmes.',
     },
 ];
 
 const stats = [
-    { value: "12,000+", label: "Certificates issued" },
-    { value: "99.9%",   label: "System uptime" },
-    { value: "< 3 s",   label: "Avg. response time" },
-    { value: "2018",    label: "System established" },
+    { value: '12,000+', label: 'Certificates issued' },
+    { value: '99.9%', label: 'System uptime' },
+    { value: '< 3 s', label: 'Avg. response time' },
+    { value: '2018', label: 'System established' },
 ];
 
 const audiences = [
     {
         icon: GraduationCap,
-        title: "Students & Alumni",
+        title: 'Students & Alumni',
         description:
-            "Share a verifiable link or QR code with employers instead of physical certificates. Your credentials are always accessible.",
+            'Share a verifiable link or QR code with employers instead of physical certificates. Your credentials are always accessible.',
     },
     {
         icon: Building2,
-        title: "Employers & Recruiters",
+        title: 'Employers & Recruiters',
         description:
-            "Instantly confirm the authenticity of any certificate presented during the hiring process — no calls to the university required.",
+            'Instantly confirm the authenticity of any certificate presented during the hiring process — no calls to the university required.',
     },
     {
         icon: Globe,
-        title: "Academic Institutions",
+        title: 'Academic Institutions',
         description:
-            "Verify transfer credentials and prior qualifications of applicants in seconds during the admissions process.",
+            'Verify transfer credentials and prior qualifications of applicants in seconds during the admissions process.',
     },
 ];
 
@@ -91,9 +91,7 @@ const audiences = [
 export default function AboutPage() {
     return (
         <MainAppLayout>
-
             <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
-
                 {/* Hero */}
                 <div className="mb-14 text-center">
                     <Badge
@@ -108,10 +106,14 @@ export default function AboutPage() {
                         Built for Trust. Designed for Speed.
                     </h1>
                     <p className="mx-auto max-w-2xl text-base leading-relaxed text-muted-foreground">
-                        The CertVerify portal is the official certificate authentication system
-                        of <span className="font-medium text-foreground">Meru University of Science and Technology</span>.
-                        It gives students, alumni, employers, and institutions a single, authoritative
-                        source of truth for academic credentials.
+                        The CertVerify portal is the official certificate
+                        authentication system of{' '}
+                        <span className="font-medium text-foreground">
+                            Meru University of Science and Technology
+                        </span>
+                        . It gives students, alumni, employers, and institutions
+                        a single, authoritative source of truth for academic
+                        credentials.
                     </p>
                 </div>
 
@@ -122,8 +124,12 @@ export default function AboutPage() {
                             key={label}
                             className="flex flex-col items-center gap-1 rounded-xl border bg-card p-5 text-center"
                         >
-                            <span className="text-2xl font-bold text-primary">{value}</span>
-                            <span className="text-xs text-muted-foreground">{label}</span>
+                            <span className="text-2xl font-bold text-primary">
+                                {value}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                                {label}
+                            </span>
                         </div>
                     ))}
                 </div>
@@ -136,7 +142,8 @@ export default function AboutPage() {
                         System Capabilities
                     </h2>
                     <p className="mb-8 text-sm text-muted-foreground">
-                        Designed around the needs of a modern academic institution.
+                        Designed around the needs of a modern academic
+                        institution.
                     </p>
 
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -148,8 +155,12 @@ export default function AboutPage() {
                                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
                                     <Icon className="h-4 w-4 text-primary" />
                                 </div>
-                                <p className="text-sm font-semibold text-foreground">{title}</p>
-                                <p className="text-sm leading-relaxed text-muted-foreground">{description}</p>
+                                <p className="text-sm font-semibold text-foreground">
+                                    {title}
+                                </p>
+                                <p className="text-sm leading-relaxed text-muted-foreground">
+                                    {description}
+                                </p>
                             </div>
                         ))}
                     </div>
@@ -159,9 +170,12 @@ export default function AboutPage() {
 
                 {/* Who is it for */}
                 <section className="mb-14">
-                    <h2 className="mb-2 text-xl font-semibold text-foreground">Who Uses CertVerify?</h2>
+                    <h2 className="mb-2 text-xl font-semibold text-foreground">
+                        Who Uses CertVerify?
+                    </h2>
                     <p className="mb-8 text-sm text-muted-foreground">
-                        The portal serves a broad audience — from fresh graduates to multinational employers.
+                        The portal serves a broad audience — from fresh
+                        graduates to multinational employers.
                     </p>
 
                     <div className="grid gap-6 sm:grid-cols-3">
@@ -171,9 +185,13 @@ export default function AboutPage() {
                                     <div className="flex h-8 w-8 items-center justify-center rounded-lg border bg-background">
                                         <Icon className="h-4 w-4 text-primary" />
                                     </div>
-                                    <p className="text-sm font-semibold text-foreground">{title}</p>
+                                    <p className="text-sm font-semibold text-foreground">
+                                        {title}
+                                    </p>
                                 </div>
-                                <p className="text-sm leading-relaxed text-muted-foreground">{description}</p>
+                                <p className="text-sm leading-relaxed text-muted-foreground">
+                                    {description}
+                                </p>
                             </div>
                         ))}
                     </div>
@@ -183,7 +201,9 @@ export default function AboutPage() {
 
                 {/* CTA */}
                 <div className="flex flex-col items-center gap-4 text-center">
-                    <h2 className="text-xl font-semibold text-foreground">Ready to verify a certificate?</h2>
+                    <h2 className="text-xl font-semibold text-foreground">
+                        Ready to verify a certificate?
+                    </h2>
                     <p className="text-sm text-muted-foreground">
                         It takes under 10 seconds. No account required.
                     </p>
