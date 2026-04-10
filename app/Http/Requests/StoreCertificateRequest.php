@@ -26,6 +26,7 @@ class StoreCertificateRequest extends FormRequest
             'first_name' => ['required', 'string'],
             'last_name' => ['required', 'string'],
             'course' => ['required', 'string'],
+            'email' => ['required', 'unique:certificates'],
             'issued_at' => [
                 'required',
                 'date',

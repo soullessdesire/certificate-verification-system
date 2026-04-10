@@ -24,6 +24,7 @@ class Certificate extends Model
         'issued_by',
         'hash',
         'status',
+        'email'
     ];
 
     protected $casts = [

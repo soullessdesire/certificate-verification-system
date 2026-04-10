@@ -57,7 +57,8 @@ export default function CreateCertificate() {
                                 | 'first_name'
                                 | 'last_name'
                                 | 'course'
-                                | 'issued_at',
+                                | 'issued_at'
+                                | 'email',
                                 string
                             >
                         >;
@@ -121,6 +122,28 @@ export default function CreateCertificate() {
                                             </p>
                                         )}
                                     </div>
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="email">Email</Label>
+                                    <Input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        placeholder="something@must.ac.ke"
+                                        disabled={processing}
+                                        autoComplete="off"
+                                        className={
+                                            errors.email
+                                                ? 'border-destructive'
+                                                : ''
+                                        }
+                                    />
+                                    {errors.email && (
+                                        <p className="text-xs text-destructive">
+                                            {errors.email}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* Course */}

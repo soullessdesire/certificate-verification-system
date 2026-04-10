@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('certificates', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->string('email')->unique();
             $table->string('course');
             $table->timestamp('issued_at');
             $table->unsignedBigInteger('issued_by');

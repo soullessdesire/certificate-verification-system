@@ -22,6 +22,7 @@ export interface Certificate {
     course: string;
     issued_at: string;
     status: CertificateStatus;
+    email: string;
 }
 
 export interface Graduate {

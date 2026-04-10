@@ -45,6 +45,7 @@ class CertificateController extends Controller
         $certificate = Certificate::create(
             [
                 'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                'email' => $request->input('email'),
                 'course' => $request->input('course'),
                 'issued_at' => $request->input('issued_at'),
                 'issued_by' => Auth::id(),

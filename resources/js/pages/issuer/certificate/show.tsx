@@ -7,6 +7,7 @@ import {
     Hash,
     ExternalLink,
     ArrowLeft,
+    Mail,
 } from 'lucide-react';
 import { PageHeader } from '@/components/dashboard/page-header';
 import { StatusBadge } from '@/components/status-badge';
@@ -48,6 +49,7 @@ export default function ShowCertificate({
             label: 'Graduate Name',
             value: certificate.name,
         },
+        { icon: Mail, label: 'Graduate Eail', value: certificate.email },
         { icon: GraduationCap, label: 'Course', value: certificate.course },
         {
             icon: CalendarDays,
