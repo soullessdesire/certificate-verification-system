@@ -67,7 +67,7 @@ class VerificationController
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'certificate_id' => $certificate?->id,
-            'status' => $certificate ? 'valid' : 'invalid',
+            'status' => $certificate ? $certificate?->status : 'invalid',
         ]);
 
         if (! $certificate) {

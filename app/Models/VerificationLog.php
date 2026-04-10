@@ -14,6 +14,7 @@ class VerificationLog extends Model
         'ip_address',
         'user_agent',
         'certificate_id',
+        'status'
     ];
 
     protected $casts = [
