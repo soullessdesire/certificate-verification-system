@@ -211,9 +211,6 @@ export default function NavBar() {
                                     Login
                                 </Button>
                             </Link>
-                            <Link href={register()}>
-                                <Button className="w-full">Sign Up</Button>
-                            </Link>
                         </>
                     )}
                 </div>
