@@ -44,7 +44,7 @@ class CertificateController extends Controller
     {
         $certificate = Certificate::create(
             [
-                'name' => $request->input('first_name').' '.$request->input('last_name'),
+                'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
                 'course' => $request->input('course'),
                 'issued_at' => $request->input('issued_at'),
                 'issued_by' => Auth::id(),
@@ -67,19 +67,8 @@ class CertificateController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, Certificate $certificate)
+    public function show(Certificate $certificate)
     {
-        $path = $request->user()->hasRole('issuer')
-            ? 'issuer/certificate/show'
-            : 'verify';
-
-        // Log verification
-        VerificationLog::create([
-            'user_id' => $request->user()->id,
-            'certificate_id' => $certificate->id,
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-        ]);
 
         $verificationUrl = route('verify.verify', $certificate->hash);
 
@@ -92,7 +81,7 @@ class CertificateController extends Controller
 
         $qrSvg = $writer->writeString($verificationUrl);
 
-        return Inertia::render($path, [
+        return Inertia::render('issuer/certificate/show', [
             'certificate' => $certificate,
             'qrSvg' => $qrSvg,
             'verificationUrl' => $verificationUrl,
