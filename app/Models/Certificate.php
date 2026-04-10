@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 
-
 #[UsePolicy(CertificatePolicy::class)]
 class Certificate extends Model
 {
@@ -56,7 +55,7 @@ class Certificate extends Model
     }
     public function getVerificationUrl()
     {
-        return url('/verify/{$this->hash}');
+        return url("/verify/{$this->hash}");
     }
 
     public function user()

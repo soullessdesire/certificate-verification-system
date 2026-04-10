@@ -5,7 +5,6 @@ import {
     LayoutGrid,
     Users,
     ClipboardList,
-    BarChart3,
     ShieldCheck,
     BookOpen,
     LifeBuoy,
@@ -25,7 +24,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { admin } from '@/routes';
-import { users, verification, audit, reports } from '@/routes/admin';
+import { users, verification, audit, } from '@/routes/admin';
 import type { NavItem } from '@/types';
 
 
@@ -34,7 +33,7 @@ const mainNavItems: NavItem[] = [
     { title: 'Users',              href: users(),                     icon: Users         },
     { title: 'Verification Logs',  href: verification(),                    icon: ShieldCheck   },
     { title: 'Audit Logs',         href: audit(),         icon: ClipboardList },
-    { title: 'Reports',            href: reports(),            icon: BarChart3     },
+    // { title: 'Reports',            href: reports(),            icon: BarChart3     },
 ];
 
 const footerNavItems: NavItem[] = [

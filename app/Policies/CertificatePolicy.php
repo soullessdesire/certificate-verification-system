@@ -13,7 +13,7 @@ class CertificatePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasRole('admin');
+        return $user->hasRole('admin', 'issuer');
     }
 
     /**
@@ -21,7 +21,7 @@ class CertificatePolicy
      */
     public function view(User $user, Certificate $certificate): bool
     {
-        return false;
+        return $user->id == $certificate->issued_by || $user->hasRole('admin');
     }
 
     /**

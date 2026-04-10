@@ -21,9 +21,10 @@ import {
 import { useInitials } from "@/hooks/use-initials";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-import { about, contact,home, issuer, logout} from "@/routes";
+import { about,home, issuer, logout} from "@/routes";
 import { register } from "@/routes";
 import { admin } from "@/routes";
+import { create as contact } from '@/routes/contact'
 import login from "@/routes/login";
 import { edit } from "@/routes/profile";
 import { index as verify } from '@/routes/verify';
@@ -156,9 +157,6 @@ export default function NavBar() {
                                 <>
                                     <Link href={login.store.definition.url}>
                                         <Button variant="ghost">Login</Button>
-                                    </Link>
-                                    <Link href={register()}>
-                                        <Button>Sign Up</Button>
                                     </Link>
                                 </>
                             )}

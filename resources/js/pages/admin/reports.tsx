@@ -1,9 +1,9 @@
 import { BarChart3, Download } from 'lucide-react';
+import { PageHeader } from '@/components/dashboard/page-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
-import { PageHeader } from '@/components/dashboard/page-header';
 
 interface ReportSummary {
     total_certificates: number;

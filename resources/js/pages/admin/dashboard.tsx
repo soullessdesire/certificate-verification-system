@@ -165,7 +165,7 @@ export default function Dashboard({ stats, recent_verifications, recent_activity
                                                     {log.description}
                                                 </p>
                                                 <p className="mt-1 text-xs text-muted-foreground">
-                                                    {log.user_name} &middot;{' '}
+                                                    {log.user?.name} &middot;{' '}
                                                     {new Date(log.created_at).toLocaleString('en-KE', {
                                                         dateStyle: 'short',
                                                         timeStyle: 'short',

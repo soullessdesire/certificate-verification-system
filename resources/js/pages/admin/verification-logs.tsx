@@ -1,14 +1,14 @@
 // resources/js/pages/admin/verification-logs.tsx
 
 import { ShieldCheck } from 'lucide-react';
+import { PageHeader } from '@/components/dashboard/page-header';
 import { StatusBadge } from '@/components/status-badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { admin } from '@/routes';
 import { verification } from '@/routes/admin';
 import type { VerificationLog } from '@/types';
-import { PageHeader } from '@/components/dashboard/page-header';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 interface VerificationLogsProps { logs: VerificationLog[] }
 
@@ -53,16 +53,16 @@ export default function VerificationLogs({ logs }: VerificationLogsProps) {
                                 ) : (
                                     logs.map((log) => (
                                         <TableRow key={log.id}>
-                                            <TableCell className="font-medium">{log.certificate_holder}</TableCell>
+                                            <TableCell className="font-medium">{log?.certificate?.name}</TableCell>
                                             <TableCell className="font-mono text-xs text-muted-foreground">
-                                                {log.certificate_id.slice(0, 8)}…
+                                                {log?.certificate_id?.slice(0, 8)}…
                                             </TableCell>
                                             <TableCell className="text-sm text-muted-foreground">
                                                 {log.ip_address ?? '—'}
                                             </TableCell>
                                             <TableCell><StatusBadge status={log.status} /></TableCell>
                                             <TableCell className="text-right text-xs text-muted-foreground">
-                                                {new Date(log.verified_at).toLocaleString('en-KE', { dateStyle: 'medium', timeStyle: 'short' })}
+                                                {new Date(log.created_at).toLocaleString('en-KE', { dateStyle: 'medium', timeStyle: 'short' })}
                                             </TableCell>
                                         </TableRow>
                                     ))

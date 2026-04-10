@@ -45,6 +45,9 @@ class HandleInertiaRequests extends Middleware
             ],
             'flash' => $request->session()->get('flash'),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'unreadNotifications' => $request->user()?->hasRole('admin')
+                ? \App\Models\ContactMessage::whereNull('read_at')->count()
+                : null,
         ];
     }
 }

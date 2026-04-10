@@ -1,4 +1,4 @@
-import { Form } from "@inertiajs/react";
+import { Form, usePage } from "@inertiajs/react";
 import {
     Mail,
     Phone,
@@ -10,7 +10,10 @@ import {
     MessageSquare,
     CheckCircle2,
 } from "lucide-react";
+import { useEffect } from "react"
 
+import { toast } from "sonner";
+import ContactMessageController from "@/actions/App/Http/Controllers/ContactMessageController";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -81,6 +84,15 @@ interface ContactPageProps {
 }
 
 export default function ContactPage({ submitted, errors = {} }: ContactPageProps) {
+
+    const { flash } = usePage().props as any;
+
+    useEffect(() => {
+        if (flash?.type === 'success') {
+            toast.success(flash.message);
+        }
+    }, [flash]);
+
     return (
         <MainAppLayout>
             <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
@@ -133,8 +145,7 @@ export default function ContactPage({ submitted, errors = {} }: ContactPageProps
                             )}
 
                             <Form
-                                method="post"
-                                action="/contact"
+                            {...ContactMessageController.store()}
                                 className="space-y-5"
                             >
                                 {({ processing }: { processing: boolean }) => (

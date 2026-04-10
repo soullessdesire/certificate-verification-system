@@ -9,9 +9,10 @@ import {
     Hash,
     ExternalLink,
     Pencil,
+    ArrowRight,
 } from 'lucide-react';
-
 import { useState } from 'react';
+
 import { PageHeader } from '@/components/dashboard/page-header';
 import { StatusBadge } from '@/components/status-badge';
 import { Button } from '@/components/ui/button';
@@ -40,8 +41,8 @@ import {
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { issuer } from '@/routes';
-import { create, edit, index } from '@/routes/certificates';
-import { show } from '@/routes/verify';
+import { create, edit, index, show } from '@/routes/certificates';
+import { verify } from '@/routes/verify';
 import type { Certificate } from '@/types';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -50,7 +51,7 @@ interface CertificatesIndexProps {
     certificates: Certificate[];
 }
 
-// ── Detail row helper ─────────────────────────────────────────────────────────
+// ── Detail row ────────────────────────────────────────────────────────────────
 
 function DetailRow({
     icon: Icon,
@@ -69,11 +70,13 @@ function DetailRow({
                 <Icon className="h-3.5 w-3.5 text-primary" />
             </div>
             <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                     {label}
                 </p>
                 <p
-                    className={`mt-0.5 text-sm font-medium break-all text-foreground ${mono ? 'font-mono text-xs' : ''}`}
+                    className={`mt-0.5 break-all text-sm font-medium text-foreground ${
+                        mono ? 'font-mono text-xs' : ''
+                    }`}
                 >
                     {value}
                 </p>
@@ -92,8 +95,8 @@ function CertificateDialog({
     onClose: () => void;
 }) {
     if (!certificate) {
-        return null;
-    }
+return null;
+}
 
     return (
         <Dialog open={!!certificate} onOpenChange={(o) => !o && onClose()}>
@@ -129,11 +132,10 @@ function CertificateDialog({
                     <DetailRow
                         icon={CalendarDays}
                         label="Date of Issue"
-                        value={new Date(
-                            certificate.issued_at,
-                        ).toLocaleDateString('en-KE', {
-                            dateStyle: 'long',
-                        })}
+                        value={new Date(certificate.issued_at).toLocaleDateString(
+                            'en-KE',
+                            { dateStyle: 'long' },
+                        )}
                     />
                     <DetailRow
                         icon={Hash}
@@ -146,8 +148,8 @@ function CertificateDialog({
                 <Separator />
 
                 <div className="flex items-center justify-between gap-2">
-                    <Link
-                        href={show({ hash: certificate.hash })}
+                    <a
+                        href={verify({hash: certificate.hash}).url}
                         target="_blank"
                         rel="noopener noreferrer"
                     >
@@ -155,14 +157,25 @@ function CertificateDialog({
                             <ExternalLink className="h-3.5 w-3.5" />
                             Verify Link
                         </Button>
-                    </Link>
+                    </a>
 
-                    <Link href={edit({ certificate: certificate.id })}>
-                        <Button size="sm" className="gap-2">
-                            <Pencil className="h-3.5 w-3.5" />
-                            Edit Status
-                        </Button>
-                    </Link>
+                    <div className="flex items-center gap-2">
+                        {/* Edit Status */}
+                        <Link href={edit({ certificate: certificate.id }).url}>
+                            <Button variant="outline" size="sm" className="gap-2">
+                                <Pencil className="h-3.5 w-3.5" />
+                                Edit Status
+                            </Button>
+                        </Link>
+
+                        {/* View full details page */}
+                        <Link href={show({ certificate: certificate.id }).url}>
+                            <Button size="sm" className="gap-2">
+                                View Details
+                                <ArrowRight className="h-3.5 w-3.5" />
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
             </DialogContent>
         </Dialog>
@@ -172,24 +185,23 @@ function CertificateDialog({
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 const breadcrumbs = [
-    { title: 'Dashboard', href: issuer() },
-    { title: 'Certificates', href: index().url },
+    { title: 'Dashboard',    href: issuer().url  },
+    { title: 'Certificates', href: index().url   },
 ];
 
-export default function CertificatesIndex({
-    certificates,
-}: CertificatesIndexProps) {
+export default function CertificatesIndex({ certificates }: CertificatesIndexProps) {
     const [selected, setSelected] = useState<Certificate | null>(null);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="flex flex-col gap-6 p-6">
+
                 <PageHeader
                     title="Certificates"
                     description="All certificates you have issued."
                     icon={FileBadge2}
                     actions={
-                        <Link href={create()}>
+                        <Link href={create().url}>
                             <Button size="sm" className="gap-2">
                                 <Plus className="h-4 w-4" />
                                 Issue Certificate
@@ -200,9 +212,7 @@ export default function CertificatesIndex({
 
                 <Card>
                     <CardHeader className="pb-3">
-                        <CardTitle className="text-base">
-                            All Certificates
-                        </CardTitle>
+                        <CardTitle className="text-base">All Certificates</CardTitle>
                         <CardDescription>
                             {certificates.length} certificate
                             {certificates.length !== 1 ? 's' : ''} issued.
@@ -216,9 +226,7 @@ export default function CertificatesIndex({
                                     <TableHead>Course</TableHead>
                                     <TableHead>Issue Date</TableHead>
                                     <TableHead>Status</TableHead>
-                                    <TableHead className="text-right">
-                                        Actions
-                                    </TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -241,25 +249,20 @@ export default function CertificatesIndex({
                                                 {cert.course}
                                             </TableCell>
                                             <TableCell className="text-sm text-muted-foreground">
-                                                {new Date(
-                                                    cert.issued_at,
-                                                ).toLocaleDateString('en-KE', {
-                                                    dateStyle: 'medium',
-                                                })}
+                                                {new Date(cert.issued_at).toLocaleDateString(
+                                                    'en-KE',
+                                                    { dateStyle: 'medium' },
+                                                )}
                                             </TableCell>
                                             <TableCell>
-                                                <StatusBadge
-                                                    status={cert.status}
-                                                />
+                                                <StatusBadge status={cert.status} />
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
                                                     className="h-8 w-8"
-                                                    onClick={() =>
-                                                        setSelected(cert)
-                                                    }
+                                                    onClick={() => setSelected(cert)}
                                                 >
                                                     <Eye className="h-3.5 w-3.5" />
                                                 </Button>

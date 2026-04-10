@@ -48,7 +48,7 @@ export interface VerificationLog {
 
 export interface AuditLog {
     id: string;
-    user_name: string;
+    user?: User;
     action: string;
     description: string;
     created_at: string;

@@ -7,6 +7,7 @@ use App\Concerns\ProfileValidationRules;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use App\Models\Role;
 use App\Models\AuditLog;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Certificate;
@@ -33,7 +34,14 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $input['password'],
         ]);
 
-        $user->assignRole('user');
+        AuditLog::create([
+            'user_id' => $user->id,
+            'action' => 'certificate_created',
+            'model_type' => User::class,
+            'model_id' => $user->id,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
 
         return $user;
     }

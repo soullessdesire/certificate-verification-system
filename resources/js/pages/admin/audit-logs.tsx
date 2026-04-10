@@ -1,11 +1,11 @@
 import { ClipboardList } from 'lucide-react';
+import { PageHeader } from '@/components/dashboard/page-header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { admin } from '@/routes';
 import { audit } from '@/routes/admin';
 import type { AuditLog } from '@/types';
-import { PageHeader } from '@/components/dashboard/page-header';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 interface AuditLogsProps { logs: AuditLog[] }
 
@@ -48,7 +48,7 @@ export default function AuditLogs({ logs }: AuditLogsProps) {
                                 ) : (
                                     logs.map((log) => (
                                         <TableRow key={log.id}>
-                                            <TableCell className="font-medium">{log.user_name}</TableCell>
+                                            <TableCell className="font-medium">{log.user?.name}</TableCell>
                                             <TableCell>
                                                 <span className="rounded-md bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground">
                                                     {log.action}

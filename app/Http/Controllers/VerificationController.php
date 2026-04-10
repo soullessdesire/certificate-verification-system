@@ -25,13 +25,14 @@ class VerificationController
     {
         $certificate = Certificate::where('hash', $hash)->first();
 
+
         // Log every attempt — valid or not
         VerificationLog::create([
             'user_id'        => Auth::id(),
             'ip_address'     => $request->ip(),
             'user_agent'     => $request->userAgent(),
             'certificate_id' => $certificate?->id,
-            'status'         => $certificate?->status,
+            'status'         => $certificate ? $certificate?->status : 'invalid',
         ]);
 
         if (! $certificate) {

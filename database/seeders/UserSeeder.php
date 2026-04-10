@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $issuerRole = Role::firstOrCreate(['name' => 'issuer']);
-        Role::firstOrCreate(['name' => 'user']);
+        Role::firstOrCreate(['name' => 'employer']);
 
         // Create 1 admin user
         User::factory()

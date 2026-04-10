@@ -11,7 +11,7 @@ class VerificationLogController extends Controller
     public function index()
     {
         return Inertia::render('admin/verification-logs', [
-            'logs' => VerificationLog::all()
+            'logs' => VerificationLog::with('certificate')->get()
         ]);
     }
 }
