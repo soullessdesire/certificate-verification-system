@@ -206,7 +206,7 @@ export default function NavBar() {
                         navLink(url, 'Dashboard')
                     ) : (
                         <>
-                            <Link href={register()}>
+                            <Link href={login()}>
                                 <Button variant="outline" className="w-full">
                                     Login
                                 </Button>
